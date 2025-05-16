@@ -94,6 +94,8 @@ namespace WpfApp1
             }
             catch (Exception ex)
             {
+
+                //prueb a de commit 
                 Debug.WriteLine($"Error: {ex.Message}");
                 MessageBox.Show($"Error al cargar los datos: {ex.Message}", "Error");
             }
