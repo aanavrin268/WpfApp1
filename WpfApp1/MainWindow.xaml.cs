@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
@@ -21,6 +22,8 @@ namespace WpfApp1
     {
         private List<Persona> _personas = new List<Persona>();
         private List<Persona> list_persona;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +31,8 @@ namespace WpfApp1
             MainFrame.Navigate(new HomePage());
 
             this.Loaded += async (sender, e) => await InitDataAsyncSimply();
+
+            this.Loaded += async (sender, e) => await InitProductsDataAsync();
 
             //cb_nombre.Items.Add("Juan");
             //cb_nombre.Items.Add("Maria");
@@ -46,6 +51,52 @@ namespace WpfApp1
 
         }
 
+        private async Task InitProductsDataAsync()
+        {
+
+            string excelPath = @"C:\excel\Libro1.xlsx";
+            string hojaExcel = "BDProductos";
+
+            try
+            {
+
+                await Task.Run(() => {
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+                        var dataTemp = new List<Producto>();
+
+                        foreach(var row in filas)
+                        {
+                            dataTemp.Add(new Producto
+                            {
+                                Nombre = row.Cell(1).GetString(),
+                                Id_sistema = row.Cell(2).GetString(),
+                                Clave = row.Cell(3).GetString(),  
+                                Descripcion = row.Cell(4).GetString()
+                            });
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.ProductoObs.Clear();
+                            foreach(var producto in dataTemp)
+                            {
+                                AppData.ProductoObs.Add(producto);
+                            }
+                        });
+
+                     
+                    }
+                });
+
+            }catch(Exception ex )
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error al cargar datos de produtos: {ex.Message}", "Error");
+            }
+        }
 
         private async Task InitDataAsyncSimply()
         {
@@ -77,13 +128,20 @@ namespace WpfApp1
                         // Actualizar la colección en el hilo principal
                         Application.Current.Dispatcher.Invoke(() =>
                         {
-                            _personas.Clear();
-                            _personas.AddRange(personasTemp);
+                            //_personas.Clear();
+                            //_personas.AddRange(personasTemp);
+                            //AppData.Personas.Clear();
+                            //AppData.Personas.AddRange(personasTemp);
+                            AppData.PersonasObs.Clear();
+                            foreach (var persona in personasTemp)
+                            {
+                                AppData.PersonasObs.Add(persona);
+                            }
                         });
                     }
                 });
 
-                Debug.WriteLine(JsonConvert.SerializeObject(_personas, Formatting.Indented));
+                Debug.WriteLine(AppData.PersonasJson);
 
                 var autoCloseMsg = new AutoCloseMessageBox(
                     "Datos cargados con éxito!",
@@ -95,7 +153,6 @@ namespace WpfApp1
             catch (Exception ex)
             {
 
-                //prueb a de commit 
                 Debug.WriteLine($"Error: {ex.Message}");
                 MessageBox.Show($"Error al cargar los datos: {ex.Message}", "Error");
             }

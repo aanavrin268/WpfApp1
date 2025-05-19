@@ -14,10 +14,16 @@
 
             <Grid Margin="0,0,-1,0">
                 <Button Content="Button" HorizontalAlignment="Left" Height="27" Margin="350,266,0,0" VerticalAlignment="Top" Width="91"/>
-                <ComboBox HorizontalAlignment="Left" Height="30" Margin="64,13,0,0" VerticalAlignment="Top" Width="124"/>
+                <ComboBox 
+                    x:Name="cb_nombre"
+                    SelectionChanged="CbNombre_SelectionChanged"
+
+                    HorizontalAlignment="Left" Height="30" Margin="64,13,0,0" VerticalAlignment="Top" Width="124"/>
                 <Label Content="Nombre" HorizontalAlignment="Left" Height="24" Margin="10,13,0,0" VerticalAlignment="Top" Width="54"/>
                 <Label Content="ID Sistema" HorizontalAlignment="Left" Height="24" Margin="246,16,0,0" VerticalAlignment="Top" Width="66"/>
-                <ComboBox HorizontalAlignment="Left" Height="30" Margin="316,12,0,0" VerticalAlignment="Top" Width="124"/>
+                <ComboBox 
+                    x:Name="cb_id"
+                    HorizontalAlignment="Left" Height="30" Margin="316,12,0,0" VerticalAlignment="Top" Width="124"/>
 
             </Grid>
 
