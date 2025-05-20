@@ -16,26 +16,13 @@ using System.Windows.Shapes;
 namespace WpfApp1
 {
     /// <summary>
-    /// Lógica de interacción para HomePage.xaml
+    /// Lógica de interacción para Search.xaml
     /// </summary>
-    public partial class HomePage : Page
+    public partial class Search : Page
     {
-        public HomePage()
+        public Search()
         {
             InitializeComponent();
-
         }
-
-        private void goToSearch(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new BuscarPage());
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e )
-        {
-            this.NavigationService.Navigate(new InsertPage());
-        }
-
-      
     }
 }

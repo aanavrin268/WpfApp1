@@ -6,14 +6,12 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1200">
-    <Grid Height="700" Width="1200">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="593*"/>
-            <ColumnDefinition Width="607*"/>
-        </Grid.ColumnDefinitions>
+    <Grid 
+        >
 
         <Frame x:Name="MainFrame"
-            Grid.ColumnSpan="2"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
                NavigationUIVisibility="Visible"
             />
 

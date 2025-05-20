@@ -4,46 +4,96 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="HomePage"
-      >
+      mc:Ignorable="d"
+      Title="HomePage">
+    <Grid Background="WhiteSmoke"
+          ShowGridLines="True">
+        <!-- Definir filas y columnas para un diseño responsivo -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Títulos -->
+            <RowDefinition Height="Auto"/>
+            <!-- Subtítulo -->
+            <RowDefinition Height="*"/>
+            <!-- Área de botones -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-    <Grid
-        Background="WhiteSmoke">
-        <TextBox HorizontalAlignment="Left" Height="42" Margin="34,10,0,0" TextWrapping="Wrap" Text="Módulo de Planta" VerticalAlignment="Top" Width="251"
-                 FontSize="30" BorderThickness="0"/>
-        <TextBox HorizontalAlignment="Left" Height="42" Margin="34,64,0,0" TextWrapping="Wrap" Text="Elige una opción para continuar" VerticalAlignment="Top" Width="714"
-            FontSize="20" BorderThickness="0"/>
-        <Border BorderBrush="Black" HorizontalAlignment="Left" Height="114" Margin="34,0,0,0" VerticalAlignment="Center" Width="215" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1">
-            <Button Content="Ir" HorizontalAlignment="Center" Height="26" Margin="0,68,0,0" VerticalAlignment="Top" Width="181"
-                   Click="Button_Click" />
-        </Border>
-        <TextBox HorizontalAlignment="Left" Height="27" Margin="94,184,0,0" TextWrapping="Wrap" Text="Insertar" VerticalAlignment="Top" Width="96"
-            FontSize="20" BorderThickness="0" FontWeight="Bold" TextAlignment="Center"/>
-        <Border BorderBrush="Black" HorizontalAlignment="Left" Height="114" Margin="284,0,0,0" VerticalAlignment="Center" Width="214" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1">
-            <Button Content="Ir" HorizontalAlignment="Center" Height="26" Margin="0,68,0,0" VerticalAlignment="Top" Width="181"
-                    />
-        </Border>
-        <TextBox HorizontalAlignment="Left" Height="27" Margin="330,184,0,0" TextWrapping="Wrap" Text="Actualizar" VerticalAlignment="Top" Width="108"
-            FontSize="20" BorderThickness="0" FontWeight="Bold" TextAlignment="Center" RenderTransformOrigin="0.5,0.5">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.405"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBox.RenderTransform>
-        </TextBox>
-        <Border BorderBrush="Black" HorizontalAlignment="Left" Height="114" Margin="533,0,0,0" VerticalAlignment="Center" Width="215" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1">
-            <Button Content="Ir" HorizontalAlignment="Center" Height="26" Margin="0,68,0,0" VerticalAlignment="Top" Width="181"
-                    />
-        </Border>
-        <TextBox HorizontalAlignment="Left" Height="27" Margin="592,184,0,0" 
-            TextWrapping="Wrap" Text="Buscar" 
-            VerticalAlignment="Top" Width="96"
-            FontSize="20" BorderThickness="0" FontWeight="Bold" TextAlignment="Center"/>
+        <!-- Título principal -->
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" 
+                   Text="Módulo de Planta" 
+                   FontSize="30" 
+                   HorizontalAlignment="Center" 
+                   Margin="10"/>
 
+        <!-- Subtítulo -->
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" 
+                   Text="Elige una opción para continuar" 
+                   FontSize="20" 
+                   HorizontalAlignment="Center" 
+                   Margin="10"/>
+
+        <!-- Botón Insertar -->
+        <Border Grid.Row="2" Grid.Column="0" 
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                CornerRadius="10" 
+                Margin="10"
+                Background="Transparent">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Insertar" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           TextAlignment="Center" 
+                           Margin="0,0,0,10"/>
+                <Button Content="Ir" 
+                        Width="150" 
+                        Height="26" 
+                        Click="Button_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Botón Actualizar -->
+        <Border Grid.Row="2" Grid.Column="1" 
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                CornerRadius="10" 
+                Margin="10"
+                Background="Transparent">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Actualizar" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           TextAlignment="Center" 
+                           Margin="0,0,0,10"/>
+                <Button Content="Ir" 
+                        Width="150" 
+                        Height="26"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Botón Buscar -->
+        <Border Grid.Row="2" Grid.Column="2" 
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                CornerRadius="10" 
+                Margin="10"
+                Background="Transparent">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Buscar" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           TextAlignment="Center" 
+                           Margin="0,0,0,10"/>
+                <Button Content="Ir" 
+                        Click="goToSearch"
+                        Width="150" 
+                        Height="26"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>

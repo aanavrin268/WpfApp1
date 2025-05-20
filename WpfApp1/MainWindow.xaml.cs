@@ -34,6 +34,8 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitProductsDataAsync();
 
+            this.Loaded += async (sender, e) => await InitCompanysDataAsync();
+
             //cb_nombre.Items.Add("Juan");
             //cb_nombre.Items.Add("Maria");
             //cb_nombre.Items.Add("Caros");
@@ -50,6 +52,54 @@ namespace WpfApp1
            
 
         }
+
+        private async Task InitCompanysDataAsync()
+        {
+            string excelPath = @"C:\excel\Libro1.xlsx";
+            string hojaExcel = "BDEmpresas";
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+                        var dataTemp = new List<Empresa>();
+
+                        foreach(var row in filas)
+                        {
+                            dataTemp.Add(new Empresa
+                            {
+                                Nombre = row.Cell(2).GetString()
+                            });
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.EmpresasObs.Clear();
+                            foreach(var empresa in dataTemp)
+                            {
+                                AppData.EmpresasObs.Add(empresa);
+                            }
+                        });
+                    }
+                });
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error al cargar los datos de las empresas:  {ex.Message}", "Error");
+            }
+        }
+
+
+
+
+
+
+
 
         private async Task InitProductsDataAsync()
         {

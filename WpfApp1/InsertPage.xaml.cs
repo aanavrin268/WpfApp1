@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ClosedXML.Excel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,8 +26,12 @@ namespace WpfApp1
         public InsertPage()
         {
             InitializeComponent();
+
+           
             //loadData();
             cb_nombre.ItemsSource = AppData.ProductoObs.Select(p => p.Nombre).ToList();
+
+            
 
             var dataJson = AppData.ProductoObs.ToList();
             var jsonString = JsonConvert.SerializeObject(dataJson, Formatting.Indented);
@@ -34,6 +39,8 @@ namespace WpfApp1
 
             Debug.WriteLine("datos cargados de produtos: ", jsonString);
         }
+
+      
 
         private void PopulateCBID()
         {
