@@ -5,7 +5,22 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       mc:Ignorable="d"
+      xmlns:converters="clr-namespace:WpfApp1"
       Title="BuscarPage">
+
+    <Page.Resources>
+        <converters:BooleanToVisibilityConverter
+            x:Key="BoolToVis"
+            TrueVaue="Visible"
+            FalseValue="Collapsed"
+            />
+        <converters:BooleanToVisibilityConverter
+            x:Key="InvertedBoolToVis"
+            TrueVaue="Collapsed"
+            FalseValue="Visible"
+            />
+    </Page.Resources>
+
 
     <Grid
        ShowGridLines="True">
@@ -227,6 +242,142 @@
                 
             </Grid>
         </Border>
+
+        <Border
+           Grid.Row="0" Grid.Column="1"
+            BorderBrush="Black"
+            BorderThickness="2"
+            Margin="20"
+            Padding="10"
+            CornerRadius="12">
+
+            <Grid
+                >
+
+                <Grid
+                    ShowGridLines="True"
+                    Visibility="{Binding EsVisible, Converter={StaticResource BoolToVis}}"
+                    >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                         Text="Arribos Verdadero"
+                         Grid.Row="0"
+                         Grid.ColumnSpan="2"
+                         />
+
+
+
+                    <TextBlock
+                         Text="Agrega o modifica los arribos de la OP."
+                         Grid.Row="1"
+                         Grid.ColumnSpan="2"
+                         />
+                    
+                    <!-- COMBO BOX DE SELECCION DE ARRIBO  -->
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
+                        Text="Selección de Folio"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0, -50, 0, 0"
+                        Panel.ZIndex="2"
+                        />
+
+                    <ComboBox x:Name="cb_arribo" 
+                              Grid.ColumnSpan="2"
+                      ItemsSource="{Binding Source={x:Static local:AppData.currentOP}, Path=Arribos}"
+                      DisplayMemberPath="Folio"
+                      SelectedValuePath="Folio"
+                      SelectionChanged="CbArribo_SelectionChanged"
+                      Grid.Row="2"
+                     Width="200"
+                     Height="30"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     Panel.ZIndex="1"
+                              />
+                    
+                 
+
+                    <!-- DATA GRID-->
+
+                    <DataGrid 
+                        Grid.Row="3"
+                        Grid.ColumnSpan="2"
+                        ItemsSource="{Binding Source={x:Static local:AppData.currentOP}, Path=Arribos}"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False">     
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Folio" Binding="{Binding Folio}" Width="70"/>
+                            <DataGridTextColumn Header="Unidades" Binding="{Binding Unidades}" Width="70"/>
+                            <DataGridTextColumn Header="Estatus" Binding="{Binding Status}" Width="100"/>
+                            <DataGridTextColumn Header="Causal" Binding="{Binding Causal}" Width="200"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <Button
+                         x:Name="btn_new_arribo"
+                         Click="AddNewArribo"
+                         Content="Nuevo"
+                         Grid.Row="4"
+                         Grid.Column="1"
+                         Width="80"
+                         Height="30"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Left"
+                         />
+
+                        <Button
+                           x:Name="btn_na_terminar"
+                           Click=""
+                           Content="Terminar"
+                           Grid.Row="4"
+                           Grid.Column="1"
+                           Width="80"
+                           Height="30"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           />
+
+                    <TextBlock
+                        Text=""
+                        />
+
+                </Grid>
+
+                <Grid
+                    ShowGridLines="True"
+                    Visibility="{Binding EsVisible, Converter={StaticResource InvertedBoolToVis}}"
+                >
+
+                    <TextBlock
+                        Text="Agrega una OP para modificar sus arribos."
+                        />
+
+
+                </Grid>
+
+            </Grid>
+
+          
+        </Border>
+        
         <Rectangle
             Grid.Row="1"
             Fill="red"

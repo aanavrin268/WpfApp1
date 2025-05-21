@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -20,11 +21,36 @@ namespace WpfApp1
     /// <summary>
     /// Lógica de interacción para BuscarPage.xaml
     /// </summary>
-    public partial class BuscarPage : Page
+    public partial class BuscarPage : Page, INotifyPropertyChanged
     {
+        public bool _esVisible = false;
+
+        public bool EsVisible
+        {
+            get => _esVisible;
+            set
+            {
+                if(_esVisible != value)
+                {
+                    _esVisible = value;
+                    OnPropertyChanged(nameof(EsVisible));
+                }
+            }
+        }
+
+
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public BuscarPage()
         {
             InitializeComponent();
+            DataContext = this;
 
             dp_plan.BlackoutDates.AddDatesInPast();
             dp_op.BlackoutDates.AddDatesInPast();
@@ -43,6 +69,25 @@ namespace WpfApp1
 
             Debug.WriteLine("datos de empresas: ", AppData.EmpresasJson);
 
+        }
+
+
+        private void AddNewArribo(object sender, RoutedEventArgs e)
+        {
+            var parentWindow = Window.GetWindow(this);
+
+            var modal = new ArriboModalWindow();
+            modal.Owner = parentWindow;
+
+            if(modal.ShowDialog() == true)
+            {
+                //App.curre
+            }
+        }
+
+        private void ChangeVisibility(object sender, RoutedEventArgs e)
+        {
+            EsVisible = !EsVisible;
         }
 
         private void dp_plan_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -121,23 +166,43 @@ namespace WpfApp1
 
         private void SaveRegister(object sender, RoutedEventArgs e)
         {
+            var  arriboSize = 0;
+
+
+
             try
             {
                 if (validateFields())
                 {
                     MessageBox.Show("Todos los campos validadedos, ", "Exito");
 
-                    AppData.newOP.Nombre = cb_nombre.SelectedItem as string;
-                    AppData.newOP.Id_Sistema = cb_id.SelectedItem as string;
-                    AppData.newOP.Empresa = cb_empresa.SelectedItem as string;
-                    AppData.newOP.Unidades = AppData.finalUnidades;
-                    AppData.newOP.Fecha_Plan = dp_plan.SelectedDate.Value;
-                    AppData.newOP.Fecha_OP = dp_op.SelectedDate.Value;
+                    AppData.newOP.Arribos.Clear();
 
+                    AppData.currentOP.Nombre = cb_nombre.SelectedItem as string;
+                    AppData.currentOP.Id_Sistema = cb_id.SelectedItem as string;
+                    AppData.currentOP.Empresa = cb_empresa.SelectedItem as string;
+                    AppData.currentOP.Unidades = AppData.finalUnidades;
+                    AppData.currentOP.Fecha_Plan = dp_plan.SelectedDate.Value;
+                    AppData.currentOP.Fecha_OP = dp_op.SelectedDate.Value;
+
+                    AppData.currentOP.Arribos.Add(new Arribos());
 
                     var jsonOP = JsonConvert.SerializeObject(AppData.newOP, Formatting.Indented);
 
                     Debug.WriteLine($"El nuevo registro es: {jsonOP}");
+
+                    //INSERT INTO LIST
+                    //AppData.OpObs.Add(AppData.newOP);
+
+                    //AppData.currentOP = AppData.newOP;
+
+                    Debug.WriteLine($"Cantidad de OPS: {AppData.OpObs.ToList().Count}");
+
+                    EsVisible = !EsVisible;
+
+                    //POPULATE THE CBOX ARRIBOS
+                    //cb_arribo.ItemsSource = AppData.currentOP.Arribos.Select(a => a.Folio).ToList();
+
 
                 }
             }
@@ -173,6 +238,31 @@ namespace WpfApp1
             else
             {
                 MessageBox.Show($"No se encontraron ids para  {AppData.SelectedProducto}");
+            }
+        }
+
+
+        private void CbArribo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(cb_arribo.SelectedItem != null)
+            {
+                //Busscar el arribo por Folio en el array de arribos del currnet 
+                var selectedFolio = cb_arribo.SelectedItem as string;
+
+                var selectedArribo = AppData.newOP.Arribos.FirstOrDefault(a => a.Folio == selectedFolio);
+
+                if(selectedArribo != null)
+                {
+                    MessageBox.Show($"Arribo encontrado!: {selectedArribo.Folio}", "Correcto");
+
+                    //Mostrar la tabla si existe el arribo
+                    AppData.CurrentArribo = selectedArribo;
+                }
+                else
+                {
+                    MessageBox.Show($"Error, folio no encontrado!: {selectedArribo.Folio}", "Error");
+
+                }
             }
         }
 
