@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +13,41 @@ namespace WpfApp1
     public static class AppData
 
     {
+
+
+        private static OP _currentOP = new OP();
+
+        public static event EventHandler<PropertyChangedEventArgs> CurrentOPChanged;
+
+
+
+        public static ObservableCollection<string> StatusList { get; } = new ObservableCollection<string>
+    {
+        "Planeación",
+        "En tránsito",
+        "Recibido",
+        "Rechazado",
+        "Completado"
+    };
+
+
+        public static OP currentOP
+        {
+            get => _currentOP;
+            set
+            {
+                if (_currentOP != value)
+                {
+                    _currentOP = value;
+                    CurrentOPChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(currentOP)));
+                }
+            }
+        }
+
+        private static void OnCurrentOPChanged([CallerMemberName] string propertyName = null)
+        {
+            CurrentOPChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+        }
 
         /*
             OBSERVABLES
@@ -61,7 +98,7 @@ namespace WpfApp1
 
         public static OP createdOP { get; set; } = new OP();
 
-        public static OP currentOP { get; set; } = new OP();
+        //public static OP currentOP { get; set; } = new OP();
 
         public static OP newOP { get; set; } = new OP();
 

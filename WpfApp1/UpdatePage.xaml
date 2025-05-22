@@ -5,10 +5,137 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+     
       Title="UpdatePage">
 
-    <Grid>
+    <Grid
+        ShowGridLines="True">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="6*" />
+
+        </Grid.RowDefinitions>
+
+    <!-- ROW 0 -->
+        <Border
+            Grid.Row="0"
+            Padding="10">
+            <Grid
+                ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock 
+                    Grid.Row="0"
+                    Text="Actualizar OP"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    FontSize="25px"
+                    FontWeight="Bold"
+                    />
+
+                <TextBlock 
+                 Grid.Row="1"
+                 Text="Ingresa un Folio o un número de OP para buscar sus datos."
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                    FontSize="16"
+                 /> 
+            </Grid>
+        </Border>
         
+    <!-- ROW 1 -->
+        <Border
+            Grid.Row="1"
+            Padding="10">
+            <Grid
+                ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <UniformGrid 
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Columns="3">
+                    <TextBlock
+                        Text="Número de Folio/OP: "
+                        Margin="0, 0, 30, 0"
+                        />
+                    <TextBox
+                        x:Name="tb_input"
+                        />
+
+                    <Button
+                        x:Name="btn_search"
+                        Content="Buscar"
+                        Margin="0, 0, 30, 0"
+                        Click="onSearch"
+                        />
+
+                </UniformGrid>
+               
+                
+            </Grid>
+        </Border>
+
+
+        <!--- ROW 3 -->
+
+        <Border
+                 Grid.Row="3"
+                 Padding="10"
+                 >
+
+            <Grid
+                     ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+
+                <DataGrid
+                    x:Name="myDataGrid"
+                    Grid.Column="0"
+                    ItemsSource="{Binding Source={x:Static local:AppData.currentOP}, Path=Arribos, Mode=OneWay}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Folio" Binding="{Binding Folio}" Width="80" />
+                        <DataGridTextColumn Header="Unidades" Binding="{Binding Unidades}" Width="70"/>
+                        <DataGridTextColumn Header="Estatus" Binding="{Binding Status}" Width="100"/>
+                        <DataGridTextColumn Header="Causal" Binding="{Binding Causal}" Width="200"/>
+                        <DataGridTemplateColumn Header="Estatus" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Status}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox 
+                                    ItemsSource="{Binding Source={x:Static local:AppData.StatusList}}"
+                                        SelectedItem="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEditable="True"/>     
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+              
+            </Grid>
+
+        </Border>
+
     </Grid>
 </Page>

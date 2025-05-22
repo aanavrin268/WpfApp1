@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
@@ -73,37 +74,65 @@ namespace WpfApp1
                     {
                         var worksheet = workbook.Worksheet(hojaExcel);
                         var filas = worksheet.RangeUsed().Rows().Skip(1);
-                        var dataTemp = new List<OP>();
 
-                        foreach(var row in filas)
+                        // Primero creamos un diccionario para agrupar por FolioOP
+                        var opDictionary = new Dictionary<string, OP>();
+
+                        foreach (var row in filas)
                         {
-                            dataTemp.Add(new OP
+                            var folioOP = row.Cell(1).GetString();
+
+                            // Creamos el objeto Arribo para cada fila
+                            var arribo = new Arribos
                             {
-                                FolioOP = row.Cell(1).GetString()
-                            });
+                                Folio = row.Cell(9).GetString(),
+                                Unidades = row.Cell(10).GetValue<int>(),
+                                Status = row.Cell(11).GetString(),
+                                Causal = row.Cell(12).GetString()
+                            };
+
+                            // Si ya existe un OP con este FolioOP, solo agregamos el Arribo
+                            if (opDictionary.TryGetValue(folioOP, out var existingOp))
+                            {
+                                existingOp.Arribos.Add(arribo);
+                            }
+                            else
+                            {
+                                // Si no existe, creamos un nuevo OP con su primer Arribo
+                                var newOp = new OP
+                                {
+                                    FolioOP = folioOP,
+                                    Op = row.Cell(2).GetString(),
+                                    Nombre = row.Cell(3).GetString(),
+                                    Id_Sistema = row.Cell(4).GetString(),
+                                    Empresa = row.Cell(5).GetString(),
+                                    Unidades = row.Cell(6).GetValue<int>(),
+                                    Fecha_Plan = row.Cell(7).GetDateTime(),
+                                    Fecha_OP = row.Cell(8).GetDateTime(),
+                                    Arribos = new ObservableCollection<Arribos> { arribo }
+                                };
+                                opDictionary.Add(folioOP, newOp);
+                            }
                         }
 
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             AppData.initialListOP.Clear();
-
-                            foreach (var op in dataTemp)
+                            foreach (var op in opDictionary.Values)
                             {
                                 AppData.initialListOP.Add(op);
                             }
-                        }); 
-
+                        });
                     }
                 });
 
-                //si todo sale bien
                 var jsonInit = JsonConvert.SerializeObject(AppData.initialListOP, Formatting.Indented);
                 Debug.WriteLine($"Contenido inicial de la bd op: {jsonInit}");
-
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine($"Error: {ex.Message}");
-                MessageBox.Show($"ERror al cargar los datos de la BD OP: {ex.Message}", "Error");
+                MessageBox.Show($"Error al cargar los datos de la BD OP: {ex.Message}", "Error");
             }
         }
 
