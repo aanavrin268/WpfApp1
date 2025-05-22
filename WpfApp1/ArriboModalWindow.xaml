@@ -8,15 +8,17 @@
         Height="300"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Title="Nuevo Arribo"  Width="400">
+        Title="Nuevo Arribo"  Width="550">
     <Grid
         ShowGridLines="True"
         >
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
-            <RowDefinition Height="6*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="5*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
+     <!--  ROW 0  -->
 
         <TextBlock
             Grid.Row="0"
@@ -25,22 +27,55 @@
             VerticalAlignment="Center"
             Text="Escribe la cantidad de unidades para el nuevo arribo"
             />
+        
+     <!--  ROW 1  -->
+
+        <TextBlock
+            Text="Unidades totales: "
+            Grid.Row="1"
+            Margin="5"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            />
+
+
+        <Label
+            x:Name="lb_units"
+            Content="0"
+            Grid.Row="1"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            Margin="100, 0, 0, 0"
+            />
+        
+        <!-- ROW 2 -->
+
+        <TextBlock
+            Text="Unidades a agregar:"
+            Grid.Row="2"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Panel.ZIndex="2"
+            Margin="0, -80, 0, 0"
+            />
+
 
         <TextBox
             x:Name="tb_na_units"
-            Grid.Row="1"
+            Grid.Row="2"
             Padding="10"
             Height="40"
             Width="300"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            Panel.ZIndex="1"
             />
 
         <Button
           x:Name="btn_na_cancel"
           Content="Cancelar"
             Click="onCancel"
-          Grid.Row="2"
+          Grid.Row="3"
           Padding="5"
           Margin="0, 0, 80, 0"
           HorizontalAlignment="Right"
@@ -51,7 +86,7 @@
             x:Name="btn_na_save"
             Content="Guardar"
             Click="onSave"
-            Grid.Row="2"
+            Grid.Row="3"
             Padding="5"
             Margin="0, 0, 10, 0"
             HorizontalAlignment="Right"

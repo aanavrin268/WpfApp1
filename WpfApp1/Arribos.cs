@@ -1,16 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace WpfApp1
 {
-    public class Arribos
+    public class Arribos : INotifyPropertyChanged
     {
-        public string Folio { get; set; } = "ARR0001";
-        public int Unidades { get; set; } = 0;
-        public string Status { get; set; } = "Planeación";
-        public string Causal { get; set; } = "Negociando plan de pago y arribo";
+        private string _folio = "ARR0001";
+        private int _unidades;
+        private string _status = "Planeación";
+        private string _causal = "Negociando plan de pago y arribo";
+
+        public string Folio
+        {
+            get => _folio;
+            set
+            {
+                if (_folio != value)
+                {
+                    _folio = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int Unidades
+        {
+            get => _unidades;
+            set
+            {
+                if (_unidades != value)
+                {
+                    _unidades = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                if (_status != value)
+                {
+                    _status = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Causal
+        {
+            get => _causal;
+            set
+            {
+                if (_causal != value)
+                {
+                    _causal = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

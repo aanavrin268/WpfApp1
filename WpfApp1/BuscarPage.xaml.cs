@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ClosedXML.Excel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO; 
+
 
 namespace WpfApp1
 {
@@ -52,6 +55,17 @@ namespace WpfApp1
             InitializeComponent();
             DataContext = this;
 
+
+            //AppData.currentOP.Nombre = "Pruebasss";
+            //AppData.currentOP.Id_Sistema = "100.2200.20";
+
+            //AppData.ListaOps.Add(AppData.currentOP);
+
+            var jsonTest = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
+
+
+            Debug.WriteLine($"Tes acutal de prueba {jsonTest}");
+
             dp_plan.BlackoutDates.AddDatesInPast();
             dp_op.BlackoutDates.AddDatesInPast();
             
@@ -69,6 +83,107 @@ namespace WpfApp1
 
             Debug.WriteLine("datos de empresas: ", AppData.EmpresasJson);
 
+        }
+
+
+
+
+private void onFinishTask(object sender, RoutedEventArgs e)
+    {
+        string excelPath = @"C:\excel\BD.xlsx";
+        string hojaExcel = "BDOP";
+
+        try
+        {
+            using (var workbook = File.Exists(excelPath)
+                ? new XLWorkbook(excelPath)
+                : new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.FirstOrDefault(ws => ws.Name == hojaExcel)
+                              ?? workbook.Worksheets.Add(hojaExcel);
+
+                int lastRow = worksheet.LastRowUsed()?.RowNumber() ?? 1;
+
+                if (lastRow == 1 && worksheet.Cell(lastRow, 1).IsEmpty())
+                {
+                    lastRow = 1;
+                }
+                else
+                {
+                    lastRow++; 
+                }
+
+                foreach (var op in AppData.ListaOps)
+                {
+                    worksheet.Cell(lastRow, 3).Value = op.Nombre;
+                    worksheet.Cell(lastRow, 4).Value = op.Id_Sistema;
+                    worksheet.Cell(lastRow, 5).Value = op.Empresa;
+                        worksheet.Cell(lastRow, 6).Value = op.Unidades;
+                        worksheet.Cell(lastRow, 7).Value = op.Fecha_Plan;
+                        worksheet.Cell(lastRow, 8).Value = op.Fecha_OP;
+
+
+                        lastRow++;
+                }
+
+                workbook.SaveAs(excelPath);
+            }
+
+            MessageBox.Show("Datos agregados al final del archivo.");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error: {ex.Message}");
+        }
+    }
+
+
+    private void onInsertRegister(object sender, RoutedEventArgs e )
+        {
+
+            var nuevoRegistro = new OP()
+            {
+                Nombre = cb_nombre.SelectedItem as string,
+                Id_Sistema = cb_id.SelectedItem as string,
+                Empresa = cb_empresa.SelectedItem as string,
+                Unidades = AppData.finalUnidades,
+                Fecha_Plan = dp_plan.SelectedDate.Value,
+                Fecha_OP = dp_op.SelectedDate.Value
+            };
+
+     
+            nuevoRegistro.Arribos.Clear();
+
+            foreach (var arribo in AppData.currentOP.Arribos)
+            {
+                nuevoRegistro.Arribos.Add(arribo);
+            }
+
+            AppData.ListaOps.Add(nuevoRegistro);
+
+            AppData.createdOP = new OP();
+            AppData.currentOP = new OP();
+
+            var currentJson = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
+            var listaJson = JsonConvert.SerializeObject(AppData.ListaOps, Formatting.Indented);
+
+            Debug.WriteLine($"current op final: {currentJson}");
+            Debug.WriteLine($"Currnet lista final: {listaJson}");
+            
+
+        }
+
+        private void EditArribo()
+        {
+            var parentWindow = Window.GetWindow(this);
+
+            var modal = new EditArriboWindow();
+            modal.Owner = parentWindow;
+
+            if(modal.ShowDialog() == true)
+            {
+
+            }
         }
 
 
@@ -178,6 +293,7 @@ namespace WpfApp1
 
                     AppData.newOP.Arribos.Clear();
 
+                  
                     AppData.currentOP.Nombre = cb_nombre.SelectedItem as string;
                     AppData.currentOP.Id_Sistema = cb_id.SelectedItem as string;
                     AppData.currentOP.Empresa = cb_empresa.SelectedItem as string;
@@ -187,16 +303,25 @@ namespace WpfApp1
 
                     AppData.currentOP.Arribos.Add(new Arribos());
 
-                    var jsonOP = JsonConvert.SerializeObject(AppData.newOP, Formatting.Indented);
+                    var jsonOP = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
 
                     Debug.WriteLine($"El nuevo registro es: {jsonOP}");
+
+
+                 
 
                     //INSERT INTO LIST
                     //AppData.OpObs.Add(AppData.newOP);
 
+                    //AppData.ListaOps.Add(AppData.createdOP);
                     //AppData.currentOP = AppData.newOP;
 
-                    Debug.WriteLine($"Cantidad de OPS: {AppData.OpObs.ToList().Count}");
+                    //lista debu
+
+                    var jsonLista = JsonConvert.SerializeObject(AppData.ListaOps, Formatting.Indented);
+
+                    Debug.WriteLine($"La lista actual es: {jsonLista}");
+
 
                     EsVisible = !EsVisible;
 
@@ -246,24 +371,35 @@ namespace WpfApp1
         {
             if(cb_arribo.SelectedItem != null)
             {
-                //Busscar el arribo por Folio en el array de arribos del currnet 
-                var selectedFolio = cb_arribo.SelectedItem as string;
 
-                var selectedArribo = AppData.newOP.Arribos.FirstOrDefault(a => a.Folio == selectedFolio);
+                dynamic selectedItem = cb_arribo.SelectedItem;
+                var selectedFolio = selectedItem.Folio;
 
-                if(selectedArribo != null)
+                Debug.WriteLine($"El folio seleccionado es: {selectedFolio}");
+
+                //var jsoncurrentOP = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
+
+                //Debug.WriteLine($"El current OP es: {jsoncurrentOP}");
+
+                var selectedArribo = AppData.currentOP.Arribos.FirstOrDefault(a => a.Folio == selectedFolio);
+
+                if (selectedArribo != null)
                 {
                     MessageBox.Show($"Arribo encontrado!: {selectedArribo.Folio}", "Correcto");
 
                     //Mostrar la tabla si existe el arribo
                     AppData.CurrentArribo = selectedArribo;
+
+                    EditArribo();
+
                 }
                 else
                 {
                     MessageBox.Show($"Error, folio no encontrado!: {selectedArribo.Folio}", "Error");
 
                 }
-            }
+              
+              }
         }
 
         private void CbNombre_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -24,6 +24,13 @@ namespace WpfApp1
         public ArriboModalWindow()
         {
             InitializeComponent();
+
+            var jsonOP = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
+            Debug.WriteLine($"OP para ver datos de pruebas:   {jsonOP}");
+
+            lb_units.Content = AppData.currentOP.Unidades;
+
+
         }
 
 
@@ -44,6 +51,19 @@ namespace WpfApp1
             }
 
             var finalUnits = (int)Math.Round(unidades);
+
+            if(finalUnits <= 0)
+            {
+                MessageBox.Show("Error, Ingresa una cantidad númerica válida", "Error");
+                return;
+            }
+
+
+            if(finalUnits > AppData.currentOP.Unidades)
+            {
+                MessageBox.Show("Error, debes ingresar una cantidad menor al valor fincado de unidadess", "Error");
+                return;
+            }
 
 
             var newArribo = new Arribos();

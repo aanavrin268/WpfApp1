@@ -35,11 +35,13 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
+     <!-- FIRST ROW -->
+        
         <Border
             Grid.Row="0" Grid.Column="0"
             BorderBrush="Black"
             BorderThickness="2"
-            Margin="20"
+            Margin="10"
             Padding="10"
             CornerRadius="12">
 
@@ -243,11 +245,13 @@
             </Grid>
         </Border>
 
+        
+ <!-- ROW 1 - COL 1 -->
         <Border
            Grid.Row="0" Grid.Column="1"
             BorderBrush="Black"
             BorderThickness="2"
-            Margin="20"
+            Margin="10"
             Padding="10"
             CornerRadius="12">
 
@@ -345,7 +349,7 @@
 
                         <Button
                            x:Name="btn_na_terminar"
-                           Click=""
+                           Click="onInsertRegister"
                            Content="Terminar"
                            Grid.Row="4"
                            Grid.Column="1"
@@ -366,9 +370,18 @@
                     Visibility="{Binding EsVisible, Converter={StaticResource InvertedBoolToVis}}"
                 >
 
-                    <TextBlock
-                        Text="Agrega una OP para modificar sus arribos."
-                        />
+                    <Viewbox Stretch="Uniform" MaxWidth="600">
+                        <TextBlock
+                             Text="Agrega una OP para modificar sus arribos."
+                             VerticalAlignment="center"
+                             HorizontalAlignment="Center"
+                             FontSize="20"
+                              TextWrapping="Wrap"
+                             />
+
+                    </Viewbox>
+
+                   
 
 
                 </Grid>
@@ -378,10 +391,64 @@
           
         </Border>
         
-        <Rectangle
+ <!-- ROW 2 COLSPAN 2 -->
+
+        <Border
             Grid.Row="1"
-            Fill="red"
-            />
+            Grid.ColumnSpan="2"
+            BorderBrush="Black"
+            BorderThickness="2"
+              Margin="10"
+              Padding="10"
+              CornerRadius="12"
+            >
+
+            
+            <Grid
+                ShowGridLines="True"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- FIRST COLUMN -->
+
+                <DataGrid
+                    Grid.Column="0"
+                    Margin="0, 0, 5, 0"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ItemsSource="{Binding Source={x:Static local:AppData.ListaOps}}"
+                    >        
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="120" />
+                        <DataGridTextColumn Header="ID Sistema" Binding="{Binding Id_Sistema}" Width="120" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+
+
+
+                <!--  SECOND COLUMN  -->
+
+                <Button
+                    x:Name="btn_finalizar"
+                    Grid.Column="1"
+                    Click="onFinishTask"
+                    Content="Finalizar Alta"
+                    Width="100"
+                    Height="30"
+                    Padding="5"
+                    Margin="10"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    />
+
+
+            </Grid>
+         </Border>
 
 
     </Grid>

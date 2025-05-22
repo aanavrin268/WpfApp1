@@ -16,6 +16,9 @@ namespace WpfApp1
             OBSERVABLES
          */
 
+        public static ObservableCollection<OP> ListaOps { get; } = new ObservableCollection<OP>();
+
+
         public static ObservableCollection<OP> OpObs { get; set; } = new ObservableCollection<OP>();
         public static ObservableCollection<Empresa> EmpresasObs { get; set; } = new ObservableCollection<Empresa>();
         public static ObservableCollection<Producto> ProductoObs { get; set; } = new ObservableCollection<Producto>();
@@ -52,6 +55,8 @@ namespace WpfApp1
         public static Arribos SelectedArribo { get; set; } = new Arribos();
         public static Arribos CurrentArribo { get; set; } = new Arribos();
 
+
+        public static OP createdOP { get; set; } = new OP();
 
         public static OP currentOP { get; set; } = new OP();
 

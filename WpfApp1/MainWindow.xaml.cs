@@ -28,6 +28,9 @@ namespace WpfApp1
         {
             InitializeComponent();
 
+
+
+
             MainFrame.Navigate(new HomePage());
 
             this.Loaded += async (sender, e) => await InitDataAsyncSimply();
@@ -35,6 +38,8 @@ namespace WpfApp1
             this.Loaded += async (sender, e) => await InitProductsDataAsync();
 
             this.Loaded += async (sender, e) => await InitCompanysDataAsync();
+
+
 
             //cb_nombre.Items.Add("Juan");
             //cb_nombre.Items.Add("Maria");
@@ -55,7 +60,7 @@ namespace WpfApp1
 
         private async Task InitCompanysDataAsync()
         {
-            string excelPath = @"C:\excel\Libro1.xlsx";
+            string excelPath = @"C:\excel\BD.xlsx";
             string hojaExcel = "BDEmpresas";
 
             try
@@ -104,7 +109,7 @@ namespace WpfApp1
         private async Task InitProductsDataAsync()
         {
 
-            string excelPath = @"C:\excel\Libro1.xlsx";
+            string excelPath = @"C:\excel\BD.xlsx";
             string hojaExcel = "BDProductos";
 
             try
@@ -121,10 +126,10 @@ namespace WpfApp1
                         {
                             dataTemp.Add(new Producto
                             {
-                                Nombre = row.Cell(1).GetString(),
-                                Id_sistema = row.Cell(2).GetString(),
-                                Clave = row.Cell(3).GetString(),  
-                                Descripcion = row.Cell(4).GetString()
+                                Nombre = row.Cell(4).GetString(),
+                                Id_sistema = row.Cell(1).GetString(),
+                                Clave = row.Cell(2).GetString(),  
+                                Descripcion = row.Cell(3).GetString()
                             });
                         }
 
@@ -150,7 +155,7 @@ namespace WpfApp1
 
         private async Task InitDataAsyncSimply()
         {
-            string excelPath = @"C:\excel\Libro1.xlsx";
+            string excelPath = @"C:\excel\BD.xlsx";
             string hojaExcel = "Hoja1";
 
             try
