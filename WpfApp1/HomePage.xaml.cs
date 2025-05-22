@@ -26,6 +26,12 @@ namespace WpfApp1
 
         }
 
+        private void goToUpdate(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new UpdatePage());
+
+        }
+
         private void goToSearch(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new BuscarPage());

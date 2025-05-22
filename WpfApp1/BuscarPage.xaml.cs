@@ -28,6 +28,8 @@ namespace WpfApp1
     {
         public bool _esVisible = false;
 
+        public int uniqueFolios = 0;
+
         public bool EsVisible
         {
             get => _esVisible;
@@ -54,6 +56,17 @@ namespace WpfApp1
         {
             InitializeComponent();
             DataContext = this;
+
+            //Load Unique COunt
+             uniqueFolios = AppData.initialListOP
+                .Select(op => op.FolioOP)
+                .Distinct()
+                .Count();
+
+            //MessageBox.Show($"Unique Folios: {uniqueFolios.ToString()}");
+
+
+
 
 
             //AppData.currentOP.Nombre = "Pruebasss";
@@ -88,68 +101,90 @@ namespace WpfApp1
 
 
 
-private void onFinishTask(object sender, RoutedEventArgs e)
-    {
-        string excelPath = @"C:\excel\BD.xlsx";
-        string hojaExcel = "BDOP";
-
-        try
+        private void onFinishTask(object sender, RoutedEventArgs e)
         {
-            using (var workbook = File.Exists(excelPath)
-                ? new XLWorkbook(excelPath)
-                : new XLWorkbook())
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDOP";
+
+            try
             {
-                var worksheet = workbook.Worksheets.FirstOrDefault(ws => ws.Name == hojaExcel)
-                              ?? workbook.Worksheets.Add(hojaExcel);
-
-                int lastRow = worksheet.LastRowUsed()?.RowNumber() ?? 1;
-
-                if (lastRow == 1 && worksheet.Cell(lastRow, 1).IsEmpty())
+                using (var workbook = File.Exists(excelPath)
+                    ? new XLWorkbook(excelPath)
+                    : new XLWorkbook())
                 {
-                    lastRow = 1;
+                    var worksheet = workbook.Worksheets.FirstOrDefault(ws => ws.Name == hojaExcel)
+                                  ?? workbook.Worksheets.Add(hojaExcel);
+
+                    if (worksheet.RowsUsed().Count() == 0)
+                    {
+                        string[] headers = { "FolioOP", "Op", "Nombre", "Id_Sistema", "Empresa", "Unidades",
+                                   "Fecha_plan", "Fecha_op", "FolioArribo", "UnidadesArribo", "Status", "Causal" };
+                        for (int i = 0; i < headers.Length; i++)
+                        {
+                            worksheet.Cell(1, i + 1).Value = headers[i];
+                        }
+                    }
+
+                    int lastRow = worksheet.LastRowUsed()?.RowNumber() + 1 ?? 2;
+
+                    foreach (var op in AppData.ListaOps)
+                    {
+                        foreach (var arribo in op.Arribos)
+                        {
+                            worksheet.Cell(lastRow, 1).Value = op.FolioOP;
+                            worksheet.Cell(lastRow, 3).Value = op.Nombre;
+                            worksheet.Cell(lastRow, 4).Value = op.Id_Sistema;
+                            worksheet.Cell(lastRow, 5).Value = op.Empresa;
+                            worksheet.Cell(lastRow, 6).Value = op.Unidades;
+                            worksheet.Cell(lastRow, 7).Value = op.Fecha_Plan;
+                            worksheet.Cell(lastRow, 8).Value = op.Fecha_OP;
+
+                            worksheet.Cell(lastRow, 9).Value = arribo.Folio;
+                            worksheet.Cell(lastRow, 10).Value = arribo.Unidades;
+                            worksheet.Cell(lastRow, 11).Value = arribo.Status;
+                            worksheet.Cell(lastRow, 12).Value = arribo.Causal;
+
+                            lastRow++;
+                        }
+                    }
+
+                    workbook.SaveAs(excelPath);
                 }
-                else
-                {
-                    lastRow++; 
-                }
 
-                foreach (var op in AppData.ListaOps)
-                {
-                    worksheet.Cell(lastRow, 3).Value = op.Nombre;
-                    worksheet.Cell(lastRow, 4).Value = op.Id_Sistema;
-                    worksheet.Cell(lastRow, 5).Value = op.Empresa;
-                        worksheet.Cell(lastRow, 6).Value = op.Unidades;
-                        worksheet.Cell(lastRow, 7).Value = op.Fecha_Plan;
-                        worksheet.Cell(lastRow, 8).Value = op.Fecha_OP;
+                MessageBox.Show("Datos exportados con éxito (1 fila por Arribo).");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
 
 
-                        lastRow++;
-                }
+        private void onInsertRegister(object sender, RoutedEventArgs e )
+        {
+            var newValue = 0;
+            var newFolio = "";
 
-                workbook.SaveAs(excelPath);
+            if(uniqueFolios > 0)
+            {
+                newValue = uniqueFolios + 1;
+            }else
+            {
+                newValue = 1;
             }
 
-            MessageBox.Show("Datos agregados al final del archivo.");
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error: {ex.Message}");
-        }
-    }
+            newFolio = "FTOP000" + newValue.ToString();
 
-
-    private void onInsertRegister(object sender, RoutedEventArgs e )
-        {
-
-            var nuevoRegistro = new OP()
-            {
-                Nombre = cb_nombre.SelectedItem as string,
-                Id_Sistema = cb_id.SelectedItem as string,
-                Empresa = cb_empresa.SelectedItem as string,
-                Unidades = AppData.finalUnidades,
-                Fecha_Plan = dp_plan.SelectedDate.Value,
-                Fecha_OP = dp_op.SelectedDate.Value
-            };
+                var nuevoRegistro = new OP()
+                {
+                    FolioOP =  newFolio,
+                    Nombre = cb_nombre.SelectedItem as string,
+                    Id_Sistema = cb_id.SelectedItem as string,
+                    Empresa = cb_empresa.SelectedItem as string,
+                    Unidades = AppData.finalUnidades,
+                    Fecha_Plan = dp_plan.SelectedDate.Value,
+                    Fecha_OP = dp_op.SelectedDate.Value
+                };
 
      
             nuevoRegistro.Arribos.Clear();
@@ -282,7 +317,7 @@ private void onFinishTask(object sender, RoutedEventArgs e)
         private void SaveRegister(object sender, RoutedEventArgs e)
         {
             var  arriboSize = 0;
-
+            var folioOP = "FTOP0001";
 
 
             try
@@ -294,6 +329,8 @@ private void onFinishTask(object sender, RoutedEventArgs e)
                     AppData.newOP.Arribos.Clear();
 
                   
+
+                    AppData.currentOP.FolioOP = folioOP;
                     AppData.currentOP.Nombre = cb_nombre.SelectedItem as string;
                     AppData.currentOP.Id_Sistema = cb_id.SelectedItem as string;
                     AppData.currentOP.Empresa = cb_empresa.SelectedItem as string;

@@ -39,6 +39,8 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitCompanysDataAsync();
 
+            this.Loaded += async (sender, e) => await InitBDOPDataAsync();
+
 
 
             //cb_nombre.Items.Add("Juan");
@@ -56,6 +58,53 @@ namespace WpfApp1
             //cb_nombre_2.SelectedValuePath = "Nombre";
            
 
+        }
+
+        private async Task InitBDOPDataAsync()
+        {
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDOP";
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+                        var dataTemp = new List<OP>();
+
+                        foreach(var row in filas)
+                        {
+                            dataTemp.Add(new OP
+                            {
+                                FolioOP = row.Cell(1).GetString()
+                            });
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.initialListOP.Clear();
+
+                            foreach (var op in dataTemp)
+                            {
+                                AppData.initialListOP.Add(op);
+                            }
+                        }); 
+
+                    }
+                });
+
+                //si todo sale bien
+                var jsonInit = JsonConvert.SerializeObject(AppData.initialListOP, Formatting.Indented);
+                Debug.WriteLine($"Contenido inicial de la bd op: {jsonInit}");
+
+            }catch(Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"ERror al cargar los datos de la BD OP: {ex.Message}", "Error");
+            }
         }
 
         private async Task InitCompanysDataAsync()

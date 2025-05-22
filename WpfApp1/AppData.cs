@@ -16,6 +16,9 @@ namespace WpfApp1
             OBSERVABLES
          */
 
+
+        public static ObservableCollection<OP> initialListOP { get; set; } = new ObservableCollection<OP>();
+
         public static ObservableCollection<OP> ListaOps { get; } = new ObservableCollection<OP>();
 
 

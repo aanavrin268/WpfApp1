@@ -6,6 +6,9 @@ namespace WpfApp1
 {
     public class OP : INotifyPropertyChanged
     {
+
+        private string _folioOP;
+        private string _op;
         private string _nombre;
         private string _idSistema;
         private string _empresa;
@@ -13,6 +16,34 @@ namespace WpfApp1
         private DateTime _fechaPlan;
         private DateTime _fechaOP;
         private ObservableCollection<Arribos> _arribos = new ObservableCollection<Arribos>();
+
+
+        public string Op
+        {
+            get => _op;
+            set
+            {
+                if(_op != value)
+                {
+                    _op = value;
+                    OnPropertyChanged(nameof(Op));
+                }
+            }
+        }
+
+        public string FolioOP
+        {
+            get => _folioOP;
+            set
+            {
+                if(_folioOP != value)
+                {
+                    _folioOP = value;
+                    OnPropertyChanged(nameof(FolioOP));
+                }
+            }
+
+        }
 
         public string Nombre
         {

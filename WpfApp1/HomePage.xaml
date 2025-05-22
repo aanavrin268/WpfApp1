@@ -8,36 +8,28 @@
       Title="HomePage">
     <Grid Background="WhiteSmoke"
           ShowGridLines="True">
-        <!-- Definir filas y columnas para un diseño responsivo -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Títulos -->
             <RowDefinition Height="Auto"/>
-            <!-- Subtítulo -->
             <RowDefinition Height="*"/>
-            <!-- Área de botones -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Título principal -->
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" 
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
                    Text="Módulo de Planta" 
                    FontSize="30" 
                    HorizontalAlignment="Center" 
                    Margin="10"/>
 
-        <!-- Subtítulo -->
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" 
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" 
                    Text="Elige una opción para continuar" 
                    FontSize="20" 
                    HorizontalAlignment="Center" 
                    Margin="10"/>
 
-        <!-- Botón Insertar -->
         <Border Grid.Row="2" Grid.Column="0" 
                 BorderBrush="Black" 
                 BorderThickness="1" 
@@ -53,7 +45,7 @@
                 <Button Content="Ir" 
                         Width="150" 
                         Height="26" 
-                        Click="Button_Click"/>
+                        Click="goToSearch"/>
             </StackPanel>
         </Border>
 
@@ -72,28 +64,11 @@
                            Margin="0,0,0,10"/>
                 <Button Content="Ir" 
                         Width="150" 
+                        Click="goToUpdate"
                         Height="26"/>
             </StackPanel>
         </Border>
 
-        <!-- Botón Buscar -->
-        <Border Grid.Row="2" Grid.Column="2" 
-                BorderBrush="Black" 
-                BorderThickness="1" 
-                CornerRadius="10" 
-                Margin="10"
-                Background="Transparent">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Buscar" 
-                           FontSize="20" 
-                           FontWeight="Bold" 
-                           TextAlignment="Center" 
-                           Margin="0,0,0,10"/>
-                <Button Content="Ir" 
-                        Click="goToSearch"
-                        Width="150" 
-                        Height="26"/>
-            </StackPanel>
-        </Border>
+     
     </Grid>
 </Page>
