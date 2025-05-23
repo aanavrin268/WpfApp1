@@ -209,6 +209,10 @@
                       Panel.ZIndex="2"
                       />
 
+                 
+
+              
+
                     <Button
                         x:Name="btn_save"
                         Grid.Row="2"
@@ -320,6 +324,7 @@
                     <!-- DATA GRID-->
 
                     <DataGrid 
+                        x:Name="dtg_buscar"
                         Grid.Row="3"
                         Grid.ColumnSpan="2"
                         ItemsSource="{Binding Source={x:Static local:AppData.currentOP}, Path=Arribos}"

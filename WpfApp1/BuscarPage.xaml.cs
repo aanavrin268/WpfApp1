@@ -57,6 +57,8 @@ namespace WpfApp1
             InitializeComponent();
             DataContext = this;
 
+            AppData.CurrentOPChanged += AppData_CurrentOPChanged;
+
             //Load Unique COunt
              uniqueFolios = AppData.initialListOP
                 .Select(op => op.FolioOP)
@@ -96,6 +98,18 @@ namespace WpfApp1
 
             Debug.WriteLine("datos de empresas: ", AppData.EmpresasJson);
 
+        }
+
+        private void AppData_CurrentOPChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if(AppData.currentOP != null)
+                {
+                    dtg_buscar.ItemsSource = null;
+                    dtg_buscar.ItemsSource = AppData.currentOP.Arribos;
+                }
+            });
         }
 
 
@@ -251,11 +265,47 @@ namespace WpfApp1
 
         private void onCancel(object sender, RoutedEventArgs e)
         {
+            ResetAllFields();
+        }
+
+
+        private void ResetAllFields()
+        {
             tb_unidades.Text = string.Empty;
             cb_nombre.SelectedItem = null;
             cb_id.SelectedItem = null;
             cb_empresa.SelectedItem = null;
+            dp_plan.SelectedDate = null;
+            dp_op.SelectedDate = null;
+
+            if (AppData.currentOP.Arribos.Count > 0)
+            {
+                MessageBox.Show($"Si hay arribos: {AppData.currentOP.Arribos.Count}");
+                EsVisible = false;
+
+                // Reiniciar las propiedades de currentOP en lugar de crear uno nuevo
+                AppData.currentOP.FolioOP = string.Empty;
+                AppData.currentOP.Nombre = string.Empty;
+                AppData.currentOP.Id_Sistema = string.Empty;
+                AppData.currentOP.Empresa = string.Empty;
+                AppData.currentOP.Unidades = 0;
+                AppData.currentOP.Fecha_Plan = default;
+                AppData.currentOP.Fecha_OP = default;
+                AppData.currentOP.Arribos.Clear();
+                AppData.currentOP.Arribos.Add(new Arribos());
+
+                var jsonCurrent = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
+                Debug.WriteLine($"Current OP después del reset: {jsonCurrent}");
+
+                var jsonList = JsonConvert.SerializeObject(AppData.ListaOps, Formatting.Indented);
+                Debug.WriteLine($"Current LISTOP después del reset: {jsonList}");
+            }
+            else
+            {
+                MessageBox.Show("No hay arribos aún");
+            }
         }
+
 
         private bool validateFields()
         {
@@ -326,9 +376,7 @@ namespace WpfApp1
                 {
                     MessageBox.Show("Todos los campos validadedos, ", "Exito");
 
-                    AppData.newOP.Arribos.Clear();
-
-                  
+                    AppData.currentOP.Arribos.Clear();
 
                     AppData.currentOP.FolioOP = folioOP;
                     AppData.currentOP.Nombre = cb_nombre.SelectedItem as string;
@@ -360,7 +408,7 @@ namespace WpfApp1
                     Debug.WriteLine($"La lista actual es: {jsonLista}");
 
 
-                    EsVisible = !EsVisible;
+                    EsVisible = true;
 
                     //POPULATE THE CBOX ARRIBOS
                     //cb_arribo.ItemsSource = AppData.currentOP.Arribos.Select(a => a.Folio).ToList();
