@@ -6,68 +6,167 @@
       xmlns:local="clr-namespace:WpfApp1"
       mc:Ignorable="d"
       Title="HomePage">
-    <Grid Background="WhiteSmoke"
+
+
+    <Grid Background="#f3f3f3"
           ShowGridLines="True">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.RenderTransform>
+            <TranslateTransform X="0" Y="0" />
+        </Grid.RenderTransform>
+        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
-                   Text="Módulo de Planta" 
-                   FontSize="30" 
-                   HorizontalAlignment="Center" 
-                   Margin="10"/>
+     <!--- First column -->
+        <Border
+            Grid.Column="0"
+            >
+            <Grid
+                ShowGridLines="True"
+                >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
 
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" 
-                   Text="Elige una opción para continuar" 
-                   FontSize="20" 
-                   HorizontalAlignment="Center" 
-                   Margin="10"/>
+                </Grid.RowDefinitions>
 
-        <Border Grid.Row="2" Grid.Column="0" 
-                BorderBrush="Black" 
-                BorderThickness="1" 
-                CornerRadius="10" 
-                Margin="10"
-                Background="Transparent">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Insertar" 
-                           FontSize="20" 
-                           FontWeight="Bold" 
-                           TextAlignment="Center" 
-                           Margin="0,0,0,10"/>
-                <Button Content="Ir" 
-                        Width="150" 
-                        Height="26" 
-                        Click="goToSearch"/>
-            </StackPanel>
+                <Grid
+                    Grid.Column="0"
+                    ShowGridLines="True"
+                    >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="8*" />
+                    </Grid.RowDefinitions>
+
+                    <Button
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Content="Fabrica"
+                        Width="120"
+                        Height="40"
+                        Margin="0, 50, 0, 0"
+                        >
+                        
+                    </Button>
+
+                    <Button
+                      Grid.Row="1"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Bottom"
+                      Content="Importación"
+                      Width="120"
+                      Height="40"
+                      Margin="0, 0, 0, 50"
+                      >
+                    </Button>
+
+
+
+                </Grid>
+
+            </Grid>
+        </Border>  
+
+     <!--  SECOND COLUMN-->
+
+        <Border
+            Grid.Column="1"
+            Background="White"
+            Margin="10, 10, 0, 0"
+            CornerRadius="6"
+            BorderThickness="1"
+            BorderBrush="#e6e6e6"
+            >
+            <Grid
+                ShowGridLines="True">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+
+                </Grid.RowDefinitions>
+            <!--- FRIST ROW -->
+                <Border
+                    Grid.Row="0"
+                    Padding="15"
+                    >
+                    <Grid>
+                        <TextBlock 
+                            Text="Nuevo"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontSize="20"
+                            FontWeight="Medium"
+                            />
+
+                        <StackPanel
+                            Orientation="Vertical"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            >
+
+                            <Border
+                                Background="Gray"
+                                Width="200"
+                                Height="130"
+                                ></Border>
+                            <Button
+                                x:Name="btn_nuevaAlta"
+                                Click="goToSearch"
+                                Content="Nueva alta"
+                                >
+                                
+                            </Button>
+
+                        </StackPanel>
+                    </Grid>
+                    
+                </Border>
+                
+            <!-- SECOND ROW  -->
+                <Border
+                    Padding="15"
+                    Grid.Row="1"
+                    >
+                    <Grid>
+                        <TextBlock
+                            Text="Otros"
+                            FontSize="20"
+                            FontWeight="Medium"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            />
+
+                        <StackPanel 
+                            Orientation="Vertical"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            >
+                            <Border
+                                Background="Gray"
+                                Width="200"
+                                Height="140">
+
+                            </Border>
+
+                            <Button
+                                x:Name="btn_update"
+                                Click="goToUpdate"
+                              Content="Actualizar OP"
+                              ></Button>            
+
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                
+            </Grid>
         </Border>
-
-        <!-- Botón Actualizar -->
-        <Border Grid.Row="2" Grid.Column="1" 
-                BorderBrush="Black" 
-                BorderThickness="1" 
-                CornerRadius="10" 
-                Margin="10"
-                Background="Transparent">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Actualizar" 
-                           FontSize="20" 
-                           FontWeight="Bold" 
-                           TextAlignment="Center" 
-                           Margin="0,0,0,10"/>
-                <Button Content="Ir" 
-                        Width="150" 
-                        Click="goToUpdate"
-                        Height="26"/>
-            </StackPanel>
-        </Border>
+        
 
      
     </Grid>

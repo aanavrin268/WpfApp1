@@ -91,7 +91,8 @@ namespace WpfApp1
             var dataJson = AppData.ProductoObs.ToList();
             var jsonString = JsonConvert.SerializeObject(dataJson, Formatting.Indented);
 
-            cb_empresa.ItemsSource = AppData.EmpresasObs.Select(e => e.Nombre).ToList();
+            //cb_empresa.ItemsSource = AppData.EmpresasObs.Select(e => e.Nombre).ToList();
+            cb_empresa.ItemsSource = Readebles.ListEmpresasObs.ToList();
 
 
             Debug.WriteLine("datos cargados de produtos: ", jsonString);
@@ -118,7 +119,7 @@ namespace WpfApp1
         private void onFinishTask(object sender, RoutedEventArgs e)
         {
             string excelPath = @"C:\excel\BD.xlsx";
-            string hojaExcel = "BDOP";
+            string hojaExcel = "BDOPOC";
 
             try
             {
@@ -197,7 +198,7 @@ namespace WpfApp1
                 newValue = 1;
             }
 
-            newFolio = "FTOP000" + newValue.ToString();
+            newFolio = "TOP000" + newValue.ToString();
 
                 var nuevoRegistro = new OP()
                 {

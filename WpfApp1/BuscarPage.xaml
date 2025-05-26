@@ -25,6 +25,10 @@
 
     <Grid
        ShowGridLines="False">
+        <Grid.RenderTransform>
+            <TranslateTransform X="0" Y="0" />
+        </Grid.RenderTransform>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"
                   />
@@ -101,9 +105,11 @@ VerticalAlignment="Top"
                       Panel.ZIndex="1"/>
 
                     <Label Content="Nombre:" 
-                                             Grid.Row="0"
-
+                           Grid.Row="0"
                            Grid.Column="0"
+                       FontWeight="Medium"
+                      Foreground="#424242"
+                           FontSize="13"
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center" 
                        Margin="0,-50,0,0" 
@@ -125,6 +131,9 @@ VerticalAlignment="Top"
 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
+                             FontWeight="Medium"
+                 Foreground="#424242"
+                      FontSize="13"
                    Margin="0,-50,0,0" 
                    Panel.ZIndex="2"/>
 
@@ -144,6 +153,9 @@ VerticalAlignment="Top"
                                                  Grid.Row="0"
 
                         HorizontalAlignment="Center" 
+                             FontWeight="Medium"
+                     Foreground="#424242"
+                          FontSize="13"
                         VerticalAlignment="Center" 
                         Margin="0,-50,0,0" 
                         Panel.ZIndex="2"/>
@@ -159,9 +171,12 @@ VerticalAlignment="Top"
                         VerticalAlignment="Center"
                         />
                     <Label
-                        Content="# de Unidades"
+                        Content="Cantidad de unidades"
                         Grid.Column="3"
                         Grid.Row="0"
+                          FontWeight="Medium"
+                     Foreground="#424242"
+                          FontSize="13"
                         HorizontalAlignment="center"
                         VerticalAlignment="center"
                         Margin="0, -50, 0, 0"
@@ -185,6 +200,9 @@ VerticalAlignment="Top"
                          Content="Fecha Plan"
                          Grid.Column="0"
                          Grid.Row="1"
+                          FontWeight="Medium"
+                     Foreground="#424242"
+                          FontSize="13"
                          HorizontalAlignment="center"
                          VerticalAlignment="center"
                          Margin="0, -50, 0, 0"
@@ -213,6 +231,9 @@ VerticalAlignment="Top"
                       HorizontalAlignment="center"
                       VerticalAlignment="center"
                       Margin="0, -50, 0, 0"
+                          FontWeight="Medium"
+ Foreground="#424242"
+      FontSize="13"
                       Panel.ZIndex="2"
                       />
 

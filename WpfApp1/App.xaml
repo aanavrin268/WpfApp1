@@ -25,5 +25,33 @@
                 </StackPanel>
             </Grid>
         </ControlTemplate>
+
+        <!-- Animación de salida: deslizar hacia la derecha + desvanecer -->
+        <Storyboard x:Key="SlideOutToRight">
+            <DoubleAnimation 
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                From="0" To="400" Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation 
+                Storyboard.TargetProperty="Opacity"
+                From="1" To="0" Duration="0:0:0.2"/>
+        </Storyboard>
+
+        <!-- Animación de entrada: deslizar desde la izquierda + aparecer -->
+        <Storyboard x:Key="SlideInFromLeft">
+            <DoubleAnimation 
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                From="-400" To="0" Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation 
+                Storyboard.TargetProperty="Opacity"
+                From="0" To="1" Duration="0:0:0.2"/>
+        </Storyboard>
     </Application.Resources>
 </Application>

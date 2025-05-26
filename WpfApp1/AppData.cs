@@ -15,20 +15,28 @@ namespace WpfApp1
     {
 
 
+        //private static AppData _instance;
+        //public static AppData Instance => _instance ?? = new AppData();
+
+
         private static OP _currentOP = new OP();
 
         public static event EventHandler<PropertyChangedEventArgs> CurrentOPChanged;
 
+        public static OPFormatted currentOPFormatted { get; set; }
+        public static event EventHandler<PropertyChangedEventArgs> CurrentOPFormattedChanged;
 
 
-        public static ObservableCollection<string> StatusList { get; } = new ObservableCollection<string>
-    {
-        "Planeación",
-        "En tránsito",
-        "Recibido",
-        "Rechazado",
-        "Completado"
-    };
+
+        public static void UpdateCurrentOP(OPFormatted newOp)
+        {
+            currentOPFormatted = newOp;
+            CurrentOPFormattedChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(currentOPFormatted)));
+        }
+
+
+
+
 
 
         public static OP currentOP
@@ -44,6 +52,12 @@ namespace WpfApp1
             }
         }
 
+    
+
+
+
+
+
         private static void OnCurrentOPChanged([CallerMemberName] string propertyName = null)
         {
             CurrentOPChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
@@ -52,6 +66,9 @@ namespace WpfApp1
         /*
             OBSERVABLES
          */
+
+
+        public static ObservableCollection<OPFormatted> initialFormattedOP { get; set; } = new ObservableCollection<OPFormatted>();
 
 
         public static ObservableCollection<OP> initialListOP { get; set; } = new ObservableCollection<OP>();
@@ -107,5 +124,10 @@ namespace WpfApp1
         public static string SelectedEmpresa { get; set; }
         public static string SelectedProducto { get; set; }
 
+
+   
+
     }
+
+
 }

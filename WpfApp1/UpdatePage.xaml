@@ -8,6 +8,11 @@
      
       Title="UpdatePage">
 
+    <Page.Resources>
+        <local:CountToStringConverter x:Key="CountConverter" />
+    </Page.Resources>
+
+
     <Grid
         ShowGridLines="True">
 
@@ -28,6 +33,9 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                
+                
+         <!--- FIRST COLUMN -->
 
                 <TextBlock 
                     Grid.Row="0"
@@ -45,6 +53,9 @@
                  HorizontalAlignment="Left"
                     FontSize="16"
                  /> 
+                
+      
+                
             </Grid>
         </Border>
         
@@ -58,6 +69,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                
+           <!---COLUMN 0  -->
 
                 <UniformGrid 
                     Grid.Column="0"
@@ -70,18 +83,104 @@
                         />
                     <TextBox
                         x:Name="tb_input"
+                        KeyDown="tb_input_Keydown"
                         />
 
                     <Button
                         x:Name="btn_search"
                         Content="Buscar"
                         Margin="0, 0, 30, 0"
-                        Click="onSearch"
+                        Click="onSearchFormatted"
                         />
 
                 </UniformGrid>
-               
                 
+            <!-- COLUMN1 -->
+
+                <!--- ROW 0  -->
+                <Border
+              Grid.Column="1"
+              Grid.Row="1"
+                    Padding="10"
+              Background="#F3F3F3"
+                    CornerRadius="10"
+              >
+
+                    <Grid
+                        ShowGridLines="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        
+                        <!--- ROW 0 -->
+                        <TextBlock
+                            Text="Folio: "
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="#434343"
+                            />
+
+                        <Label
+                            x:Name="lb_folio"
+                            Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=neoOp.FolioOp}"                           
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="40, 0, 0,0"
+                            Background="Blue"
+                            Foreground="White"
+                            FontWeight="Medium">
+                        </Label>
+
+                        <TextBlock
+                             Text="Número de orden: "
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="#434343"
+                            Margin="0, 0, 60, 0"
+                             />
+
+                        <Label
+                            Content="NA"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Background="Green"
+                            Foreground="White"
+                            FontWeight="Medium"
+                            ></Label>
+
+
+                        <!-- ROW 1  -->
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="Dada de alta el "
+                            HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="#434343"
+                            />
+
+                        <Label 
+                            x:Name="lb_date"
+                            Grid.Row="1"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="100, 0, 0, 0"
+                            Content="26/05/2025"
+                            FontSize="16"
+                            FontWeight="DemiBold"
+                            ></Label>
+
+                    </Grid>
+
+                </Border>
+                
+
+
             </Grid>
         </Border>
 
@@ -100,10 +199,269 @@
                     <ColumnDefinition Width="*" />
 
                 </Grid.ColumnDefinitions>
+               
+            <!--- COLUMN 0 -->
 
+                <Border
+                    Grid.Column="0"
+                    Padding="10"
+                    Background="White"
+                    Margin="5"
+                    CornerRadius="10"
+                    >
+                    <Grid
+                        ShowGridLines="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="7*" />
+
+                        </Grid.RowDefinitions>
+                        
+                        
+                    <!--- ROW 0 -->
+                        <StackPanel
+                          Grid.Row="0"
+                          Orientation="Vertical"
+                          >
+                            <TextBlock
+                                x:Name="kk"
+                                HorizontalAlignment="Right"
+                                Text="{Binding Source={x:Static local:Reactividad.Instance}, Path=neoOp.Products.Count, Converter={StaticResource CountConverter}}"
+                                />
+
+                            <TextBlock
+                                Text="Selecciona un producto para ver su información  y sus arribos."
+                                />
+
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="0, 10, 0, 0"
+                                >
+                                <ComboBox
+                                    x:Name="cb_folios"
+                                    Width="200"
+                                    ></ComboBox>
+                                <Button
+                                    Margin="20, 0, 0, 0"
+                                    Content="Ver"
+                                    Width="50"
+                                    Height="30"
+                                    ></Button>
+                                
+                            </StackPanel>
+
+
+                        </StackPanel>   
+                        
+                    <!-- ROW 1 -->
+                        <Border
+                            Grid.Row="1"
+                            Background="#f3f3f3"
+                            >
+                            <Grid
+                                ShowGridLines="True"
+                                >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+
+                                <!-- ROW 0 -->
+                                <!-- COL 0 -->
+
+                                    <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                >
+
+                                    <TextBlock
+                                    Text="Nombre"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                    />
+
+                                    <Label
+                                        Content="es nombre"
+                                        HorizontalAlignment="Right"
+                                        Margin="20, 0, 0, 0"
+                                     VerticalAlignment="Center"
+
+                                        >
+                                        
+                                    </Label>
+
+                                </StackPanel>
+
+                                <!-- ROW 0 -->
+                                <!-- COL 1 -->
+
+                                    <StackPanel
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Orientation="Horizontal"
+                                       VerticalAlignment="Center"
+                                   >
+
+                                    <TextBlock
+                                       Text="Id.Sistema"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                       />
+
+                                    <Label
+                                       Content="es PT10032"
+                                       HorizontalAlignment="Right"
+                                       Margin="20, 0, 0, 0"
+                                    VerticalAlignment="Center"
+
+                                       >    
+
+                                    </Label>
+
+                                </StackPanel>
+
+                                <!-- ROW 1 -->
+                                <!-- COL 0 -->
+
+                                    <StackPanel
+                                     Grid.Row="1"
+                                     Grid.Column="0"
+                                     Orientation="Horizontal"
+                                         VerticalAlignment="Center"
+                                     >
+
+                                    <TextBlock
+                                         Text="Empresa"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Center"
+                                         />
+
+                                    <Label
+                                         Content="es sdsd"
+                                         HorizontalAlignment="Right"
+                                         Margin="20, 0, 0, 0"
+                                      VerticalAlignment="Center"
+
+                                         >  
+
+                                    </Label>
+
+                                </StackPanel>
+
+                                <!-- ROW 1 -->
+                                <!-- COL 1 -->
+
+                                    <StackPanel
+                                  Grid.Row="1"
+                                  Grid.Column="1"
+                                  Orientation="Horizontal"
+                                      VerticalAlignment="Center"
+                                  >
+
+                                    <TextBlock
+                                      Text="Unidades"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                      />    
+
+                                    <Label
+                                      Content="es 1000000"
+                                      HorizontalAlignment="Right"
+                                      Margin="20, 0, 0, 0"
+                                   VerticalAlignment="Center"
+
+                                         >
+
+                                    </Label>
+
+                                </StackPanel>
+
+
+                                <!-- ROW 2 -->
+                                <!-- COL 0 -->
+
+                                    <StackPanel
+                                   Grid.Row="2"
+                                   Grid.Column="0"
+                                   Orientation="Horizontal"
+                                       VerticalAlignment="Center"
+                                         >
+
+                                    <TextBlock
+                                       Text="Fecha Plan"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                                    />
+
+                                        <Label
+                                           Content="es 0/0/0"
+                                           HorizontalAlignment="Right"
+                                           Margin="20, 0, 0, 0"
+                                        VerticalAlignment="Center"
+
+                                            >
+
+                                    </Label>
+
+                                </StackPanel>
+
+
+                                <!-- ROW 2 -->
+                                <!-- COL  1 -->
+
+                                <StackPanel
+                                     Grid.Row="2"
+                                     Grid.Column="1"
+                                     Orientation="Horizontal"
+                                         VerticalAlignment="Center"
+                                        >
+
+                                    <TextBlock
+                                         Text="Fecha OP"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Center"
+                                        />
+
+                                    <Label
+                                         Content="es 0/0/0"
+                                         HorizontalAlignment="Right"
+                                         Margin="20, 0, 0, 0"
+                                      VerticalAlignment="Center"
+
+                                         >
+
+                                    </Label>
+
+                                </StackPanel>
+
+                            </Grid>
+                            
+                          
+                            
+                            
+                            
+                        </Border>
+                        
+                    </Grid>
+
+                  
+                    
+                    
+                </Border>
+                
+                
+            <!-- COLUMN 1 -->
                 <DataGrid
                     x:Name="myDataGrid"
-                    Grid.Column="0"
+                    Grid.Column="1"
                     ItemsSource="{Binding Source={x:Static local:AppData.currentOP}, Path=Arribos, Mode=OneWay}"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False">
@@ -122,7 +480,7 @@
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
                                     <ComboBox 
-                                    ItemsSource="{Binding Source={x:Static local:AppData.StatusList}}"
+                                    ItemsSource="{Binding Source={x:Static local:Readebles.StatusList}}"
                                         SelectedItem="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
                                         IsEditable="True"/>     
                                 </DataTemplate>

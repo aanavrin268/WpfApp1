@@ -7,8 +7,8 @@ namespace WpfApp1
     {
         private string _folio = "ARR0001";
         private int _unidades;
-        private string _status = "Planeación";
-        private string _causal = "Negociando plan de pago y arribo";
+        private string _status = "PLANEACION";
+        private string _causal = "EN PLANEACION";
 
         public string Folio
         {

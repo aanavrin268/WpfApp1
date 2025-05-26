@@ -40,7 +40,11 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitCompanysDataAsync();
 
+            this.Loaded += async (sender, e) => await InitBDOPFormattedDataAsync();
+
             this.Loaded += async (sender, e) => await InitBDOPDataAsync();
+
+
 
 
 
@@ -61,10 +65,110 @@ namespace WpfApp1
 
         }
 
+
+        private async Task InitBDOPFormattedDataAsync()
+        {
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDOPOC";
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+
+                        var opDictionary = new Dictionary<string, OPFormatted>();
+
+                        foreach (var row in filas)
+                        {
+                            var folioOP = row.Cell(1).GetString();
+                            var idSistema = row.Cell(4).GetString(); 
+
+                            var arribo = new Arribos
+                            {
+                                Folio = row.Cell(9).GetString(),
+                                Unidades = row.Cell(10).GetValue<int>(),
+                                Status = row.Cell(11).GetString(),
+                                Causal = row.Cell(12).GetString()
+                            };
+
+                            if (opDictionary.TryGetValue(folioOP, out var existingOp))
+                            {
+                                var existingProduct = existingOp.Products.FirstOrDefault(p => p.Id_Sistema == idSistema);
+
+                                if (existingProduct != null)
+                                {
+                                    // Si el producto ya existe, solo añadimos el arribo
+                                    existingProduct.Arribos.Add(arribo);
+                                }
+                                else
+                                {
+                                    // Si no existe, creamos un nuevo producto
+                                    var newProduct = new Productss
+                                    {
+                                        Nombre = row.Cell(3).GetString(),
+                                        Id_Sistema = idSistema,
+                                        Empresa = row.Cell(5).GetString(),
+                                        Unidades = row.Cell(6).GetValue<int>(),
+                                        Fecha_Plan = row.Cell(7).GetDateTime(),
+                                        Fecha_OP = row.Cell(8).GetDateTime(),
+                                        Arribos = new ObservableCollection<Arribos> { arribo }
+                                    };
+                                    existingOp.Products.Add(newProduct);
+                                }
+                            }
+                            else
+                            {
+                                // Si no existe la OP, creamos una nueva con su primer producto
+                                var newProduct = new Productss
+                                {
+                                    Nombre = row.Cell(3).GetString(),
+                                    Id_Sistema = idSistema,
+                                    Empresa = row.Cell(5).GetString(),
+                                    Unidades = row.Cell(6).GetValue<int>(),
+                                    Fecha_Plan = row.Cell(7).GetDateTime(),
+                                    Fecha_OP = row.Cell(8).GetDateTime(),
+                                    Arribos = new ObservableCollection<Arribos> { arribo }
+                                };
+
+                                var newOp = new OPFormatted
+                                {
+                                    FolioOp = folioOP,
+                                    Op = row.Cell(2).GetString(),
+                                    Products = new ObservableCollection<Productss> { newProduct }
+                                };
+                                opDictionary.Add(folioOP, newOp);
+                            }
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.initialFormattedOP.Clear();
+                            foreach (var op in opDictionary.Values)
+                            {
+                                AppData.initialFormattedOP.Add(op);
+                            }
+                        });
+                    }
+                });
+
+                var jsonInit = JsonConvert.SerializeObject(AppData.initialFormattedOP, Formatting.Indented);
+                Debug.WriteLine($"Contenido inicial FORMATEADO: : {jsonInit}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error al cargar los datos de la BD OP: {ex.Message}", "Error");
+            }
+        }
+
         private async Task InitBDOPDataAsync()
         {
             string excelPath = @"C:\excel\BD.xlsx";
-            string hojaExcel = "BDOP";
+            string hojaExcel = "BDOPOC";
 
             try
             {
@@ -135,6 +239,12 @@ namespace WpfApp1
                 MessageBox.Show($"Error al cargar los datos de la BD OP: {ex.Message}", "Error");
             }
         }
+
+
+
+
+
+
 
         private async Task InitCompanysDataAsync()
         {
