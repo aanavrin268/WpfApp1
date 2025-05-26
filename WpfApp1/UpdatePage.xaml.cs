@@ -52,7 +52,6 @@ namespace WpfApp1
         {
             Dispatcher.Invoke(() =>
             {
-                // Solo actualiza la colección interna sin reasignar currentOP
                 if (AppData.currentOP != null)
                 {
                     myDataGrid.ItemsSource = null;

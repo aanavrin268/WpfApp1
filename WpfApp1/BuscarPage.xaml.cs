@@ -166,6 +166,16 @@ namespace WpfApp1
                 }
 
                 MessageBox.Show("Datos exportados con éxito (1 fila por Arribo).");
+
+
+
+                AppData.ListaOps.Clear();
+                //Go the other page
+
+                this.NavigationService.Navigate(new HomePage());
+
+
+
             }
             catch (Exception ex)
             {
@@ -218,7 +228,12 @@ namespace WpfApp1
 
             Debug.WriteLine($"current op final: {currentJson}");
             Debug.WriteLine($"Currnet lista final: {listaJson}");
-            
+
+
+            //Clan data
+            EsVisible = false;
+
+            ResetAllFields();
 
         }
 

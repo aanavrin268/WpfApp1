@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       mc:Ignorable="d"
+      Background="#e6e6e6"
       xmlns:converters="clr-namespace:WpfApp1"
       Title="BuscarPage">
 
@@ -23,7 +24,7 @@
 
 
     <Grid
-       ShowGridLines="True">
+       ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"
                   />
@@ -39,14 +40,15 @@
         
         <Border
             Grid.Row="0" Grid.Column="0"
-            BorderBrush="Black"
-            BorderThickness="2"
+            BorderBrush="#cccccc"
+            BorderThickness="1"
             Margin="10"
             Padding="10"
+            Background="White"
             CornerRadius="12">
 
             <Grid
-                ShowGridLines="True">
+                ShowGridLines="False">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
@@ -57,14 +59,19 @@
                 <TextBlock
                     Text="Datos de la OP"
                     Grid.Row="0"
+                    FontSize="17"
+                    FontWeight="Medium"
                     />
                 <TextBlock
                      Text="Llena todos los valores correspondientes a la OP que deseas ingresar."
                      Grid.Row="1"
+                    HorizontalAlignment="Left"
+VerticalAlignment="Top"
+                    FontSize="13"
                      />
 
                 <Grid
-                    ShowGridLines="True"
+                    ShowGridLines="False"
                     Grid.Row="2">
 
                     <Grid.ColumnDefinitions>
@@ -253,9 +260,10 @@
  <!-- ROW 1 - COL 1 -->
         <Border
            Grid.Row="0" Grid.Column="1"
-            BorderBrush="Black"
-            BorderThickness="2"
+            BorderBrush="#cccccc"
+            BorderThickness="1"
             Margin="10"
+            Background="White"
             Padding="10"
             CornerRadius="12">
 
@@ -282,6 +290,8 @@
                     <TextBlock
                          Text="Arribos Verdadero"
                          Grid.Row="0"
+                         FontSize="17"
+                        
                          Grid.ColumnSpan="2"
                          />
 
@@ -375,12 +385,14 @@
                     Visibility="{Binding EsVisible, Converter={StaticResource InvertedBoolToVis}}"
                 >
 
-                    <Viewbox Stretch="Uniform" MaxWidth="600">
+                    <Viewbox Stretch="Uniform" MaxWidth="300">
                         <TextBlock
                              Text="Agrega una OP para modificar sus arribos."
                              VerticalAlignment="center"
                              HorizontalAlignment="Center"
-                             FontSize="20"
+                             FontSize="30"
+                            Foreground="#424242"
+                            FontWeight="DemiBold"
                               TextWrapping="Wrap"
                              />
 
@@ -401,8 +413,9 @@
         <Border
             Grid.Row="1"
             Grid.ColumnSpan="2"
-            BorderBrush="Black"
-            BorderThickness="2"
+            BorderBrush="#cccccc"
+            BorderThickness="1"
+            Background="White"
               Margin="10"
               Padding="10"
               CornerRadius="12"
@@ -410,18 +423,46 @@
 
             
             <Grid
-                ShowGridLines="True"
+                ShowGridLines="False"
                 >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2.5*" />
+                    <RowDefinition Height="7.5*" />
+
+                </Grid.RowDefinitions>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 
+                
+                <!-- FIRST ROW  -->
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Vista Previa"
+                    FontSize="17"
+                    FontWeight="Medium"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    />
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontSize="14"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Left"
+                    Text="Lista de productos de la OP."
+                    />
+
                 <!-- FIRST COLUMN -->
 
                 <DataGrid
+                    Grid.Row="1"
                     Grid.Column="0"
-                    Margin="0, 0, 5, 0"
+                    Margin="0, 10, 5, 0"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False"
                     ItemsSource="{Binding Source={x:Static local:AppData.ListaOps}}"
@@ -440,6 +481,7 @@
 
                 <Button
                     x:Name="btn_finalizar"
+                    Grid.Row="1"
                     Grid.Column="1"
                     Click="onFinishTask"
                     Content="Finalizar Alta"
