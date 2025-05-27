@@ -44,6 +44,8 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitBDOPDataAsync();
 
+            this.Loaded += async (sender, e) => await InitBDArribosDataAsync();
+
 
 
 
@@ -242,7 +244,68 @@ namespace WpfApp1
 
 
 
+        private async Task InitBDArribosDataAsync()
+        {
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDArribos";
 
+            try
+            {
+                await Task.Run(() =>
+                {
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+                        var dataTemp = new List<Arribos>();
+
+                        foreach (var row in filas)
+                        {
+                            dataTemp.Add(new Arribos
+                            {
+                                IdArribo = row.Cell(1).GetString(),
+                                Folio = row.Cell(2).GetString(),
+                                FolioOrden = row.Cell(3).GetString(),
+                                Proveedor = row.Cell(4).GetString(),
+                                Status = row.Cell(9).GetString(),
+                                Causal = row.Cell(10).GetString(),
+                                EnvioFabrica = row.Cell(11).GetDateTime(),
+                                AduanaAnalisis = row.Cell(12).GetDateTime(),
+                                FechaAlmacen = row.Cell(13).GetDateTime(),
+                                LiberacionWms = row.Cell(14).GetDateTime(),
+                                Unidades = row.Cell(15).GetValue<int>(),
+                                Retencion = row.Cell(16).GetValue<int>(),
+                                NoConforme = row.Cell(17).GetValue<int>(),
+                                DisponibleWms = row.Cell(18).GetValue<int>(),
+                                NoLotes = row.Cell(19).GetValue<int>(),
+                                NoSemana = row.Cell(20).GetValue<int>(),
+                                LastUpdates = row.Cell(21).GetDateTime()
+
+
+                            });
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.ArribosObs.Clear();
+                            foreach (var arrivo in dataTemp)
+                            {
+                                AppData.ArribosObs.Add(arrivo);
+                            }
+                        });
+                    }
+                });
+
+                var arribosObsJson = JsonConvert.SerializeObject(AppData.ArribosObs, Formatting.Indented);
+                Debug.WriteLine($"Contenido de ArribosObs: {arribosObsJson}");
+            }
+
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error al cargar los datos de los arribos: {ex.Message}", "Error");
+            }
+        }
 
 
 

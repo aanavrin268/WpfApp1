@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WpfApp1
@@ -10,6 +11,7 @@ namespace WpfApp1
 
         private OPFormatted _neoOp = new OPFormatted();
         private Productss _currentProductss = new Productss();
+
 
         public Productss currentProductss
         {

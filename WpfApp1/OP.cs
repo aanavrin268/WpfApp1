@@ -13,8 +13,8 @@ namespace WpfApp1
         private string _idSistema;
         private string _empresa;
         private int _unidades;
-        private DateTime _fechaPlan;
-        private DateTime _fechaOP;
+        private DateTime _fechaPlan = DateTime.Today.Date;
+        private DateTime _fechaOP = DateTime.Today.Date;
         private ObservableCollection<Arribos> _arribos = new ObservableCollection<Arribos>();
 
 

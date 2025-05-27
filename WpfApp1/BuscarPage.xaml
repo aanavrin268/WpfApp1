@@ -183,17 +183,35 @@ VerticalAlignment="Top"
                         Panel.ZIndex="2"
                         />
 
-
-                    <DatePicker
-                        x:Name="dp_op"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Width="200"
-                        Height="30"
-                        HorizontalAlignment="center"
-                        VerticalAlignment="center"
-                        Panel.ZIndex="1"
-                        />
+            <!--  
+                    
+                      <DatePicker
+                          x:Name="dp_op"
+                          Grid.Row="1"
+                          Grid.Column="0"
+                          Width="200"
+                          Height="30"
+                          HorizontalAlignment="center"
+                          VerticalAlignment="center"
+                          Panel.ZIndex="1"
+                          />
+                    
+                                       <Label
+                     Content="Fecha  OP"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     HorizontalAlignment="center"
+                     VerticalAlignment="center"
+                     Margin="0, -50, 0, 0"
+                         FontWeight="Medium"
+                    Foreground="#424242"
+                         FontSize="13"
+                     Panel.ZIndex="2"
+                     />
+                    
+                    
+                    -->
+                  
 
                     <Label
                          
@@ -215,7 +233,7 @@ VerticalAlignment="Top"
                     <DatePicker
                          x:Name="dp_plan"
                          Grid.Row="1"
-                         Grid.Column="1"
+                         Grid.Column="0"
                          SelectedDateChanged="dp_plan_SelectedDateChanged"
                          Width="200"
                          Height="30"
@@ -224,18 +242,7 @@ VerticalAlignment="Top"
                          Panel.ZIndex="1"
                          />     
 
-                    <Label
-                      Content="Fecha  OP"
-                      Grid.Column="1"
-                      Grid.Row="1"
-                      HorizontalAlignment="center"
-                      VerticalAlignment="center"
-                      Margin="0, -50, 0, 0"
-                          FontWeight="Medium"
- Foreground="#424242"
-      FontSize="13"
-                      Panel.ZIndex="2"
-                      />
+                   
 
                  
 
@@ -366,6 +373,9 @@ VerticalAlignment="Top"
                             <DataGridTextColumn Header="Unidades" Binding="{Binding Unidades}" Width="70"/>
                             <DataGridTextColumn Header="Estatus" Binding="{Binding Status}" Width="100"/>
                             <DataGridTextColumn Header="Causal" Binding="{Binding Causal}" Width="200"/>
+                            <DataGridTextColumn Header="Ini. Fabrica" Binding="{Binding EnvioFabrica}" Width="100"/>
+                            <DataGridTextColumn Header="Fin Fabrica" Binding="{Binding AduanaAnalisis}" Width="100"/>
+                            <DataGridTextColumn Header="F. Almacen" Binding="{Binding FechaAlmacen}" Width="100"/>
 
                         </DataGrid.Columns>
                     </DataGrid>
@@ -489,8 +499,12 @@ VerticalAlignment="Top"
                     ItemsSource="{Binding Source={x:Static local:AppData.ListaOps}}"
                     >        
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="120" />
-                        <DataGridTextColumn Header="ID Sistema" Binding="{Binding Id_Sistema}" Width="120" />
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="150" />
+                        <DataGridTextColumn Header="ID Sistema" Binding="{Binding Id_Sistema}" Width="100" />
+                        <DataGridTextColumn Header="Empresa" Binding="{Binding Empresa}" Width="260" />
+                        <DataGridTextColumn Header="Unidades" Binding="{Binding Unidades}" Width="100" />
+                        <DataGridTextColumn Header="Fecha de planeación" Binding="{Binding Fecha_Plan}" Width="130" />
+
                     </DataGrid.Columns>
                 </DataGrid>
 

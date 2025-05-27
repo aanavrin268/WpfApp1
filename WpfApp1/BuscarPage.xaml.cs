@@ -16,7 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO; 
+using System.IO;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 
 namespace WpfApp1
@@ -24,11 +25,12 @@ namespace WpfApp1
     /// <summary>
     /// Lógica de interacción para BuscarPage.xaml
     /// </summary>
-    public partial class BuscarPage : Page, INotifyPropertyChanged
+    public partial class BuscarPage : INotifyPropertyChanged
     {
         public bool _esVisible = false;
 
         public int uniqueFolios = 0;
+        public int uniqueArrId = 0;
 
         public bool EsVisible
         {
@@ -65,6 +67,25 @@ namespace WpfApp1
                 .Distinct()
                 .Count();
 
+            uniqueArrId = AppData.ArribosObs
+                .Where(a => a.IdArribo != null && !string.IsNullOrEmpty(a.IdArribo.ToString()))
+               .Select(a => a.IdArribo)
+               .Distinct()
+               .Count();
+
+
+            MessageBox.Show($"Unique idArriboss: {uniqueArrId.ToString()}");
+
+
+            var uniqueList = AppData.ArribosObs
+               .Select(a => a.IdArribo)
+               .Distinct()
+               .ToList();
+
+            var uniqueJson = JsonConvert.SerializeObject(uniqueList, Formatting.Indented);
+            Debug.WriteLine($"Unique list: {uniqueList}");
+
+
             //MessageBox.Show($"Unique Folios: {uniqueFolios.ToString()}");
 
 
@@ -82,7 +103,7 @@ namespace WpfApp1
             Debug.WriteLine($"Tes acutal de prueba {jsonTest}");
 
             dp_plan.BlackoutDates.AddDatesInPast();
-            dp_op.BlackoutDates.AddDatesInPast();
+            //dp_op.BlackoutDates.AddDatesInPast();
             
             cb_nombre.ItemsSource = AppData.ProductoObs
                 .Where(p => !string.IsNullOrEmpty(p.Nombre))
@@ -113,6 +134,72 @@ namespace WpfApp1
             });
         }
 
+
+        private void saveArribos()
+        {
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDArribos";
+
+            string newID = $"ARR000{uniqueArrId +1}";
+
+
+            try
+            {
+                using (var workbook = File.Exists(excelPath)
+                    ? new XLWorkbook(excelPath) : new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.FirstOrDefault(ws => ws.Name == hojaExcel)
+                        ?? workbook.Worksheets.Add(hojaExcel);
+
+                    if(worksheet.RowsUsed().Count() == 0)
+                    {
+                        string[] headers = {"IdArribo", "FolioArribo", "UnidadesArribo", "Status", "Causal" };
+
+                        for(int i=0; i<headers.Length; i++)
+                        {
+                            worksheet.Cell(1, i + 1).Value = headers[i];
+                        }
+                    }
+
+                    int lastRow = worksheet.LastRowUsed()?.RowNumber() + 1 ?? 2;
+
+                    foreach (var arribo in AppData.ArribosList)
+                    {
+                        worksheet.Cell(lastRow, 1).Value = newID;
+                        worksheet.Cell(lastRow, 2).Value = arribo.Folio;
+                        worksheet.Cell(lastRow, 3).Value = arribo.FolioOrden;
+                        worksheet.Cell(lastRow, 4).Value = arribo.Proveedor;
+                        worksheet.Cell(lastRow, 9).Value = arribo.Status;
+                        worksheet.Cell(lastRow, 10).Value = arribo.Causal;
+                        worksheet.Cell(lastRow, 11).Value = arribo.EnvioFabrica;
+                        worksheet.Cell(lastRow, 12).Value = arribo.AduanaAnalisis;
+                        worksheet.Cell(lastRow, 13).Value = arribo.FechaAlmacen;
+                        worksheet.Cell(lastRow, 14).Value = arribo.LiberacionWms;
+                        worksheet.Cell(lastRow, 15).Value = arribo.Unidades;
+                        worksheet.Cell(lastRow, 16).Value = arribo.Retencion;
+                        worksheet.Cell(lastRow, 17).Value = arribo.NoConforme;
+                        worksheet.Cell(lastRow, 18).Value = arribo.DisponibleWms;
+                        worksheet.Cell(lastRow, 19).Value = arribo.NoLotes;
+                        worksheet.Cell(lastRow, 20).Value = arribo.NoSemana;
+                        worksheet.Cell(lastRow, 21).Value = arribo.LastUpdates;
+
+
+
+
+                        lastRow++;
+                    }
+
+                   workbook.SaveAs(excelPath);
+                }
+
+                MessageBox.Show("Arribos guardos con éxito!");
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
 
 
 
@@ -154,10 +241,10 @@ namespace WpfApp1
                             worksheet.Cell(lastRow, 7).Value = op.Fecha_Plan;
                             worksheet.Cell(lastRow, 8).Value = op.Fecha_OP;
 
-                            worksheet.Cell(lastRow, 9).Value = arribo.Folio;
-                            worksheet.Cell(lastRow, 10).Value = arribo.Unidades;
-                            worksheet.Cell(lastRow, 11).Value = arribo.Status;
-                            worksheet.Cell(lastRow, 12).Value = arribo.Causal;
+                            //worksheet.Cell(lastRow, 9).Value = arribo.Folio;
+                            //worksheet.Cell(lastRow, 10).Value = arribo.Unidades;
+                            //worksheet.Cell(lastRow, 11).Value = arribo.Status;
+                            //worksheet.Cell(lastRow, 12).Value = arribo.Causal;
 
                             lastRow++;
                         }
@@ -173,7 +260,9 @@ namespace WpfApp1
                 AppData.ListaOps.Clear();
                 //Go the other page
 
-                this.NavigationService.Navigate(new HomePage());
+                saveArribos();
+
+                //this.NavigationService.Navigate(new HomePage());
 
 
 
@@ -208,7 +297,7 @@ namespace WpfApp1
                     Empresa = cb_empresa.SelectedItem as string,
                     Unidades = AppData.finalUnidades,
                     Fecha_Plan = dp_plan.SelectedDate.Value,
-                    Fecha_OP = dp_op.SelectedDate.Value
+                    //Fecha_OP = dp_op.SelectedDate.Value
                 };
 
      
@@ -219,7 +308,10 @@ namespace WpfApp1
                 nuevoRegistro.Arribos.Add(arribo);
             }
 
+
+
             AppData.ListaOps.Add(nuevoRegistro);
+
 
             AppData.createdOP = new OP();
             AppData.currentOP = new OP();
@@ -227,9 +319,29 @@ namespace WpfApp1
             var currentJson = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
             var listaJson = JsonConvert.SerializeObject(AppData.ListaOps, Formatting.Indented);
 
+            //nuevoRegistro.Arribos[0].FolioOrden = newFolio;
+
+            int i = 1;
+            foreach (var arribo in nuevoRegistro.Arribos)
+            {
+                arribo.FolioOrden = newFolio;
+                arribo.Folio = $"FARR000{i}";
+                i++;
+            }
+       ;
+
+            foreach (var arribo in nuevoRegistro.Arribos)
+            {
+                AppData.ArribosList.Add(arribo);
+            }
+
+            var arribosjson = JsonConvert.SerializeObject(AppData.ArribosList, Formatting.Indented);
+
+
+
             Debug.WriteLine($"current op final: {currentJson}");
             Debug.WriteLine($"Currnet lista final: {listaJson}");
-
+            Debug.WriteLine($"LA LISTA DE ARRIBOS: {arribosjson}");
 
             //Clan data
             EsVisible = false;
@@ -292,7 +404,7 @@ namespace WpfApp1
             cb_id.SelectedItem = null;
             cb_empresa.SelectedItem = null;
             dp_plan.SelectedDate = null;
-            dp_op.SelectedDate = null;
+            //dp_op.SelectedDate = null;
 
             if (AppData.currentOP.Arribos.Count > 0)
             {
@@ -353,12 +465,14 @@ namespace WpfApp1
                 return false ;
             }
 
-
+            /*
             if (dp_op.SelectedDate == null)
             {
                 MessageBox.Show("Selecciona una fecha de OP", "Error");
                 return false;
             }
+
+            */
 
             if (string.IsNullOrEmpty(AppData.gettedUnidades))
             {
@@ -400,9 +514,11 @@ namespace WpfApp1
                     AppData.currentOP.Empresa = cb_empresa.SelectedItem as string;
                     AppData.currentOP.Unidades = AppData.finalUnidades;
                     AppData.currentOP.Fecha_Plan = dp_plan.SelectedDate.Value;
-                    AppData.currentOP.Fecha_OP = dp_op.SelectedDate.Value;
+                    //AppData.currentOP.Fecha_OP = dp_op.SelectedDate.Value;
 
                     AppData.currentOP.Arribos.Add(new Arribos());
+
+                    AppData.currentOP.Arribos[0].FolioOrden = folioOP;
 
                     var jsonOP = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
 

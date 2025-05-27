@@ -73,10 +73,16 @@ namespace WpfApp1
 
         public static ObservableCollection<OP> initialListOP { get; set; } = new ObservableCollection<OP>();
 
+        public static ObservableCollection<Arribos> ArribosList { get; set; } = new ObservableCollection<Arribos>();
+
         public static ObservableCollection<OP> ListaOps { get; } = new ObservableCollection<OP>();
 
 
         public static ObservableCollection<OP> OpObs { get; set; } = new ObservableCollection<OP>();
+
+
+        public static ObservableCollection<Arribos> ArribosObs { get; set; } = new ObservableCollection<Arribos>();
+
         public static ObservableCollection<Empresa> EmpresasObs { get; set; } = new ObservableCollection<Empresa>();
         public static ObservableCollection<Producto> ProductoObs { get; set; } = new ObservableCollection<Producto>();
         public static ObservableCollection<Persona> PersonasObs { get; set; } = new ObservableCollection<Persona>();
