@@ -5,11 +5,25 @@ namespace WpfApp1
 {
     public class Reactividad : INotifyPropertyChanged
     {
-        // Singleton: única instancia de Reactividad
         private static readonly Reactividad _instance = new Reactividad();
         public static Reactividad Instance => _instance;
 
         private OPFormatted _neoOp = new OPFormatted();
+        private Productss _currentProductss = new Productss();
+
+        public Productss currentProductss
+        {
+            get => _currentProductss;
+
+            set
+            {
+                if(_currentProductss != value)
+                {
+                    _currentProductss = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public OPFormatted neoOp
         {
@@ -24,7 +38,6 @@ namespace WpfApp1
             }
         }
 
-        // Evento no estático para cumplir con INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -32,7 +45,6 @@ namespace WpfApp1
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Constructor privado para el singleton
         private Reactividad() { }
     }
 }

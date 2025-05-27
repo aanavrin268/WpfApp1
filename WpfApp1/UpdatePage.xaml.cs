@@ -41,6 +41,29 @@ namespace WpfApp1
         }
 
 
+        private void onCBSelectionChange(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = cb_folios.SelectedItem as string;
+
+            //MessageBox.Show($"es: {selectedItem}");
+
+            var selectedProduct = Reactividad.Instance.neoOp.Products.FirstOrDefault(p => p.Nombre == selectedItem);
+
+            if (selectedProduct != null)
+            {
+                MessageBox.Show("Encontrado!");
+
+                Reactividad.Instance.currentProductss = selectedProduct;
+
+                var json = JsonConvert.SerializeObject(Reactividad.Instance.currentProductss, Formatting.Indented);
+                Debug.WriteLine($"El current producto es: {json}");
+            }
+
+
+
+        }
+
+
         private void tb_input_Keydown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)

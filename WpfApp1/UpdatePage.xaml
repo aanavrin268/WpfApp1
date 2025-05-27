@@ -240,6 +240,7 @@
                                 <ComboBox
                                     x:Name="cb_folios"
                                     Width="200"
+                                    SelectionChanged="onCBSelectionChange"
                                     ></ComboBox>
                                 <Button
                                     Margin="20, 0, 0, 0"
@@ -288,8 +289,10 @@
                                         VerticalAlignment="Center"
                                     />
 
+
+
                                     <Label
-                                        Content="es nombre"
+                                        Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Nombre}"
                                         HorizontalAlignment="Right"
                                         Margin="20, 0, 0, 0"
                                      VerticalAlignment="Center"
@@ -317,7 +320,7 @@
                                        />
 
                                     <Label
-                                       Content="es PT10032"
+                                       Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Id_Sistema}"
                                        HorizontalAlignment="Right"
                                        Margin="20, 0, 0, 0"
                                     VerticalAlignment="Center"
@@ -345,7 +348,7 @@
                                          />
 
                                     <Label
-                                         Content="es sdsd"
+                                         Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Empresa}"
                                          HorizontalAlignment="Right"
                                          Margin="20, 0, 0, 0"
                                       VerticalAlignment="Center"
@@ -370,10 +373,10 @@
                                       Text="Unidades"
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Center"
-                                      />    
+                                      />
 
                                     <Label
-                                      Content="es 1000000"
+                                      Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Unidades}"
                                       HorizontalAlignment="Right"
                                       Margin="20, 0, 0, 0"
                                    VerticalAlignment="Center"
@@ -401,8 +404,8 @@
                                            VerticalAlignment="Center"
                                                     />
 
-                                        <Label
-                                           Content="es 0/0/0"
+                                    <Label
+                                           Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Fecha_Plan}"
                                            HorizontalAlignment="Right"
                                            Margin="20, 0, 0, 0"
                                         VerticalAlignment="Center"
@@ -431,7 +434,7 @@
                                         />
 
                                     <Label
-                                         Content="es 0/0/0"
+                                         Content="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Fecha_OP}"
                                          HorizontalAlignment="Right"
                                          Margin="20, 0, 0, 0"
                                       VerticalAlignment="Center"
@@ -462,7 +465,7 @@
                 <DataGrid
                     x:Name="myDataGrid"
                     Grid.Column="1"
-                    ItemsSource="{Binding Source={x:Static local:AppData.currentOP}, Path=Arribos, Mode=OneWay}"
+                    ItemsSource="{Binding Source={x:Static local:Reactividad.Instance}, Path=currentProductss.Arribos, Mode=OneWay}"
                     AutoGenerateColumns="False"
                     CanUserAddRows="False">
                     
