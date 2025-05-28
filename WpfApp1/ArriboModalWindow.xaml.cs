@@ -66,7 +66,13 @@ namespace WpfApp1
 
             AppData.currentOP.Arribos.Add(newArribo);
 
+            int i = 1;
 
+            foreach (var arribo in AppData.currentOP.Arribos)
+            {
+                arribo.Folio = $"FARR000{totalArribos+i}";
+                i++;
+            }
 
             string opjson = JsonConvert.SerializeObject(AppData.currentOP, Formatting.Indented);
 

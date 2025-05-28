@@ -11,21 +11,159 @@ namespace WpfApp1
         private string _op;
         private string _nombre;
         private string _idSistema;
-        private string _descripcion;
-        private string _proveedorDesc;
+        private string _descripcion = "";
+        private string _proveedorDesc = "";
         private string _empresa;
-        private int _costo;
+        private int _costo = 0;
         private int _unidades;
-        private int _montoOrden;
-        private string _moneda;
-        private string _incoterms;
-        private string _cComerciales;
+        private int _montoOrden = 0;
+        private string _moneda = "MXN";
+        private string _incoterms = "";
+        private string _cComerciales = "Efectivo";
         private DateTime _fechaPlan = DateTime.Today.Date;
         private DateTime _fechaOP = DateTime.Today.Date;
-        private int totalPzsArribos = 0;
+        private int _totalPzsArribos = 0;
         private string _statusOrden = "";
         private string _tipoProducto = "";
         private ObservableCollection<Arribos> _arribos = new ObservableCollection<Arribos>();
+
+        public string TipoProducto
+        {
+            get => _tipoProducto;
+            set
+            {
+                if (_tipoProducto != value)
+                {
+                    _tipoProducto = value;
+                    OnPropertyChanged(nameof(TipoProducto));
+                }
+            }
+        }
+
+
+        public string StatusOrden
+        {
+            get => _statusOrden;
+            set
+            {
+                if (_statusOrden != value)
+                {
+                    _statusOrden = value;
+                    OnPropertyChanged(nameof(StatusOrden));
+                }
+            }
+        }
+
+
+        public int TotalPzsArribos
+        {
+            get => _totalPzsArribos;
+            set
+            {
+                if (_totalPzsArribos != value)
+                {
+                    _totalPzsArribos = value;
+                    OnPropertyChanged(nameof(TotalPzsArribos));
+                }
+            }
+        }
+
+        public string CComerciales
+        {
+            get => _cComerciales;
+            set
+            {
+                if (_cComerciales != value)
+                {
+                    _cComerciales = value;
+                    OnPropertyChanged(nameof(CComerciales));
+                }
+            }
+        }
+
+
+        public string Incoterms
+        {
+            get => _incoterms;
+            set
+            {
+                if (_incoterms != value)
+                {
+                    _incoterms = value;
+                    OnPropertyChanged(nameof(Incoterms));
+                }
+            }
+        }
+
+
+        public string Moneda
+        {
+            get => _moneda;
+            set
+            {
+                if (_moneda != value)
+                {
+                    _moneda = value;
+                    OnPropertyChanged(nameof(Moneda));
+                }
+            }
+        }
+
+        public int MontoOrden
+        {
+            get => _montoOrden;
+            set
+            {
+                if (_montoOrden != value)
+                {
+                    _montoOrden = value;
+                    OnPropertyChanged(nameof(MontoOrden));
+                }
+            }
+        }
+
+
+        public int Costo
+        {
+            get => _costo;
+            set
+            {
+                if(_costo != value)
+                {
+                    _costo = value;
+                    OnPropertyChanged(nameof(Costo));
+                }
+            }
+        }
+
+        public string ProveedorDesc
+        {
+            get => _proveedorDesc;
+
+            set
+            {
+                if (_proveedorDesc != value)
+                {
+                    _proveedorDesc = value;
+                    OnPropertyChanged(nameof(ProveedorDesc));
+                }
+            }
+        }
+
+
+        public string Descripcion
+        {
+            get => _descripcion;
+
+            set
+            {
+                if (_descripcion != value)
+                {
+                    _descripcion = value;
+                    OnPropertyChanged(nameof(Descripcion));
+                }
+            }
+        }
 
 
         public string Op

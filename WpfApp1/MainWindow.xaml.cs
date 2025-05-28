@@ -42,6 +42,8 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitBDOrdersDataAsync();
 
+            this.Loaded += async (sender, e) => await InitBDCatalogoDataAsync();
+
             //this.Loaded += async (sender, e) => await InitBDOPFormattedDataAsync();
 
             //this.Loaded += async (sender, e) => await InitBDOPDataAsync();
@@ -245,6 +247,54 @@ namespace WpfApp1
         }
 
 
+        private async Task InitBDCatalogoDataAsync()
+        {
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDCatalogo";
+
+            try
+            {
+                await Task.Run(() =>
+                {
+
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+                        var dataTemp = new List<Pt>();
+
+                        foreach (var row in filas)
+                        {
+                            dataTemp.Add(new Pt
+                            {
+                                Id_sistema = row.Cell(1).GetString(),
+                                Clave = row.Cell(2).GetString(),
+                                Proveedor = row.Cell(3).GetString(),
+                                Descripcion = row.Cell(4).GetString()
+                            });
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.initialPtLists.Clear();
+                            foreach (var pt in dataTemp)
+                            {
+                                AppData.initialPtLists.Add(pt);
+                            }
+                        });
+                    }
+                });
+
+                var jsonList = JsonConvert.SerializeObject(AppData.initialPtLists, Formatting.Indented);
+                Debug.WriteLine($"La lista de pts es: {jsonList}");
+
+            }catch(Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error al cargar los datos de los pts: {ex.Message}", "Error");
+            }
+        }
+
 
         private async Task InitBDOrdersDataAsync()
         {
@@ -265,8 +315,24 @@ namespace WpfApp1
                         {
                             dataTemp.Add(new OP { 
                                 FolioOP = row.Cell(1).GetString(),
-                                Nombre = row.Cell(3).GetString()
-                            
+                                Op = row.Cell(2).GetString(),
+                                Nombre = row.Cell(3).GetString(),
+                                Id_Sistema = row.Cell(4).GetString(),
+                                Descripcion = row.Cell(5).GetString(),
+                                ProveedorDesc = row.Cell(6).GetString(),
+                                Empresa = row.Cell(7).GetString(),
+                                Costo = row.Cell(8).GetValue<int>(),
+                                Unidades = row.Cell(9).GetValue<int>(),
+                                MontoOrden = row.Cell(10).GetValue<int>(),
+                                Moneda = row.Cell(11).GetString(),
+                                Incoterms = row.Cell(12).GetString(),
+                                CComerciales = row.Cell(13).GetString(),
+                                Fecha_Plan = row.Cell(14).GetDateTime(),
+                                Fecha_OP = row.Cell(15).GetDateTime(),
+                                TotalPzsArribos = row.Cell(16).GetValue<int>(),
+                                StatusOrden = row.Cell(17).GetString(),
+                                TipoProducto = row.Cell(18).GetString(),
+
                             });
                         }
 

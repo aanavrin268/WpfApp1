@@ -163,9 +163,11 @@ namespace WpfApp1
 
                     int lastRow = worksheet.LastRowUsed()?.RowNumber() + 1 ?? 2;
 
+                    int j = 0;
+
                     foreach (var arribo in AppData.ArribosList)
                     {
-                        worksheet.Cell(lastRow, 1).Value = newID;
+                        worksheet.Cell(lastRow, 1).Value = $"ARR000{(uniqueArrId + 1) + j}";
                         worksheet.Cell(lastRow, 2).Value = arribo.Folio;
                         worksheet.Cell(lastRow, 3).Value = arribo.FolioOrden;
                         worksheet.Cell(lastRow, 4).Value = arribo.Proveedor;
@@ -183,7 +185,7 @@ namespace WpfApp1
                         worksheet.Cell(lastRow, 20).Value = arribo.NoSemana;
                         worksheet.Cell(lastRow, 21).Value = arribo.LastUpdates;
 
-
+                        j++;
 
 
                         lastRow++;
@@ -233,16 +235,25 @@ namespace WpfApp1
                     {
 
                         worksheet.Cell(lastRow, 1).Value = op.FolioOP;
+                        worksheet.Cell(lastRow, 2).Value = op.Op;
                         worksheet.Cell(lastRow, 3).Value = op.Nombre;
                         worksheet.Cell(lastRow, 4).Value = op.Id_Sistema;
+                        worksheet.Cell(lastRow, 5).Value = op.Descripcion;
+                        worksheet.Cell(lastRow, 6).Value = op.ProveedorDesc;
                         worksheet.Cell(lastRow, 7).Value = op.Empresa;
+                        worksheet.Cell(lastRow, 8).Value = op.Costo;
                         worksheet.Cell(lastRow, 9).Value = op.Unidades;
+                        worksheet.Cell(lastRow, 10).Value = op.MontoOrden;
+                        worksheet.Cell(lastRow, 11).Value = op.Moneda;
+                        worksheet.Cell(lastRow, 12).Value = op.Incoterms;
+                        worksheet.Cell(lastRow, 13).Value = op.CComerciales;
                         worksheet.Cell(lastRow, 14).Value = op.Fecha_Plan;
                         worksheet.Cell(lastRow, 15).Value = op.Fecha_OP;
+                        worksheet.Cell(lastRow, 16).Value = op.TotalPzsArribos;
+                        worksheet.Cell(lastRow, 17).Value = op.StatusOrden;
+                        worksheet.Cell(lastRow, 18).Value = op.TipoProducto;
 
                         lastRow++;
-
-
                        
                     }
 
@@ -274,6 +285,8 @@ namespace WpfApp1
         {
             var newValue = 0;
             var newFolio = "";
+            var newName = "";
+            var newProvider = "";
 
             if(uniqueFolios > 0)
             {
@@ -285,14 +298,29 @@ namespace WpfApp1
 
             newFolio = "TOP000" + newValue.ToString();
 
-                var nuevoRegistro = new OP()
+            string gettedId = cb_id.SelectedItem as string;
+
+            //Get the pt's description
+            var pt = AppData.initialPtLists.FirstOrDefault(pt => pt.Id_sistema == gettedId);
+            if (pt != null)
+            {
+                newName = pt.Descripcion;
+                newProvider = pt.Proveedor;
+            }
+
+
+
+            var nuevoRegistro = new OP()
                 {
                     FolioOP =  newFolio,
-                    Nombre = cb_nombre.SelectedItem as string,
+                    Nombre = newName,
+                    ProveedorDesc = newProvider,
                     Id_Sistema = cb_id.SelectedItem as string,
                     Empresa = cb_empresa.SelectedItem as string,
                     Unidades = AppData.finalUnidades,
                     Fecha_Plan = dp_plan.SelectedDate.Value,
+                    StatusOrden = "PLANEADA",
+                    TipoProducto = "PT"
                     //Fecha_OP = dp_op.SelectedDate.Value
                 };
 
@@ -318,6 +346,8 @@ namespace WpfApp1
             //nuevoRegistro.Arribos[0].FolioOrden = newFolio;
 
             int i = 1;
+
+        
             foreach (var arribo in nuevoRegistro.Arribos)
             {
                 arribo.FolioOrden = newFolio;

@@ -71,6 +71,8 @@ namespace WpfApp1
         public static ObservableCollection<OPFormatted> initialFormattedOP { get; set; } = new ObservableCollection<OPFormatted>();
 
 
+        public static ObservableCollection<Pt> initialPtLists { get; } = new ObservableCollection<Pt>();
+
         public static ObservableCollection<OP> initialListOP { get; set; } = new ObservableCollection<OP>();
 
         public static ObservableCollection<Arribos> ArribosList { get; set; } = new ObservableCollection<Arribos>();
