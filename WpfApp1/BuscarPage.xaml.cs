@@ -231,23 +231,19 @@ namespace WpfApp1
 
                     foreach (var op in AppData.ListaOps)
                     {
-                        foreach (var arribo in op.Arribos)
-                        {
-                            worksheet.Cell(lastRow, 1).Value = op.FolioOP;
-                            worksheet.Cell(lastRow, 3).Value = op.Nombre;
-                            worksheet.Cell(lastRow, 4).Value = op.Id_Sistema;
-                            worksheet.Cell(lastRow, 5).Value = op.Empresa;
-                            worksheet.Cell(lastRow, 6).Value = op.Unidades;
-                            worksheet.Cell(lastRow, 7).Value = op.Fecha_Plan;
-                            worksheet.Cell(lastRow, 8).Value = op.Fecha_OP;
 
-                            //worksheet.Cell(lastRow, 9).Value = arribo.Folio;
-                            //worksheet.Cell(lastRow, 10).Value = arribo.Unidades;
-                            //worksheet.Cell(lastRow, 11).Value = arribo.Status;
-                            //worksheet.Cell(lastRow, 12).Value = arribo.Causal;
+                        worksheet.Cell(lastRow, 1).Value = op.FolioOP;
+                        worksheet.Cell(lastRow, 3).Value = op.Nombre;
+                        worksheet.Cell(lastRow, 4).Value = op.Id_Sistema;
+                        worksheet.Cell(lastRow, 7).Value = op.Empresa;
+                        worksheet.Cell(lastRow, 9).Value = op.Unidades;
+                        worksheet.Cell(lastRow, 14).Value = op.Fecha_Plan;
+                        worksheet.Cell(lastRow, 15).Value = op.Fecha_OP;
 
-                            lastRow++;
-                        }
+                        lastRow++;
+
+
+                       
                     }
 
                     workbook.SaveAs(excelPath);

@@ -40,9 +40,11 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitCompanysDataAsync();
 
-            this.Loaded += async (sender, e) => await InitBDOPFormattedDataAsync();
+            this.Loaded += async (sender, e) => await InitBDOrdersDataAsync();
 
-            this.Loaded += async (sender, e) => await InitBDOPDataAsync();
+            //this.Loaded += async (sender, e) => await InitBDOPFormattedDataAsync();
+
+            //this.Loaded += async (sender, e) => await InitBDOPDataAsync();
 
             this.Loaded += async (sender, e) => await InitBDArribosDataAsync();
 
@@ -243,6 +245,52 @@ namespace WpfApp1
         }
 
 
+
+        private async Task InitBDOrdersDataAsync()
+        {
+            string excelPath = @"C:\excel\BD.xlsx";
+            string hojaExcel = "BDOPOC";
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    using (var workbook = new XLWorkbook(excelPath))
+                    {
+                        var worksheet = workbook.Worksheet(hojaExcel);
+                        var filas = worksheet.RangeUsed().Rows().Skip(1);
+                        var dataTemp = new List<OP>();
+
+                        foreach (var row in filas)
+                        {
+                            dataTemp.Add(new OP { 
+                                FolioOP = row.Cell(1).GetString(),
+                                Nombre = row.Cell(3).GetString()
+                            
+                            });
+                        }
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            AppData.initialListOP.Clear();
+                            foreach (var op in dataTemp)
+                            {
+                                AppData.initialListOP.Add(op);
+                            }
+                        });
+                    }
+                });
+
+                var jsonInit = JsonConvert.SerializeObject(AppData.initialListOP, Formatting.Indented);
+                Debug.WriteLine($"El nuevo OP list es: {jsonInit}");
+
+
+            }catch(Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error al cargar los datos de los arribos: {ex.Message}", "Error");
+            }
+        }
 
         private async Task InitBDArribosDataAsync()
         {

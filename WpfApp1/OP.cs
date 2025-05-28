@@ -11,10 +11,20 @@ namespace WpfApp1
         private string _op;
         private string _nombre;
         private string _idSistema;
+        private string _descripcion;
+        private string _proveedorDesc;
         private string _empresa;
+        private int _costo;
         private int _unidades;
+        private int _montoOrden;
+        private string _moneda;
+        private string _incoterms;
+        private string _cComerciales;
         private DateTime _fechaPlan = DateTime.Today.Date;
         private DateTime _fechaOP = DateTime.Today.Date;
+        private int totalPzsArribos = 0;
+        private string _statusOrden = "";
+        private string _tipoProducto = "";
         private ObservableCollection<Arribos> _arribos = new ObservableCollection<Arribos>();
 
 
