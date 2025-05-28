@@ -23,6 +23,8 @@ namespace WpfApp1
 
         public static event EventHandler<PropertyChangedEventArgs> CurrentOPChanged;
 
+
+
         public static OPFormatted currentOPFormatted { get; set; }
         public static event EventHandler<PropertyChangedEventArgs> CurrentOPFormattedChanged;
 

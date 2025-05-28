@@ -36,8 +36,33 @@ namespace WpfApp1
             AppData.CurrentOPFormattedChanged += OnCurrentOPFormattedChanged;
             this.Unloaded += (s, e) => AppData.CurrentOPFormattedChanged -= OnCurrentOPFormattedChanged;
 
+            getFormattedData();
 
 
+        }
+
+
+        private void getFormattedData()
+        {
+            List<OPFormatted> formattedList = new List<OPFormatted>();
+
+
+            //Inititallistop
+            foreach (var op in AppData.initialListOP)
+            {
+                var newFormattedOP = new OPFormatted
+                {
+                    Op = op.Op,
+                    FolioOp = op.FolioOP
+                };
+
+                formattedList.Add(newFormattedOP);
+
+            }
+
+            var json = JsonConvert.SerializeObject(formattedList, Formatting.Indented);
+
+            Debug.WriteLine($"La lista FORMATTED ES: {json}");
         }
 
 

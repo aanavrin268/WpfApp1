@@ -40,7 +40,9 @@ namespace WpfApp1
 
             this.Loaded += async (sender, e) => await InitCompanysDataAsync();
 
-            this.Loaded += async (sender, e) => await InitBDOrdersDataAsync();
+            this.Loaded += async (sender, e) => await LoadAndProcessMainData();
+
+            //this.Loaded += async (sender, e) => await InitBDOrdersDataAsync();
 
             this.Loaded += async (sender, e) => await InitBDCatalogoDataAsync();
 
@@ -48,7 +50,7 @@ namespace WpfApp1
 
             //this.Loaded += async (sender, e) => await InitBDOPDataAsync();
 
-            this.Loaded += async (sender, e) => await InitBDArribosDataAsync();
+            //this.Loaded += async (sender, e) => await InitBDArribosDataAsync();
 
 
 
@@ -67,9 +69,92 @@ namespace WpfApp1
             //cb_nombre_2.ItemsSource = list_persona;
             //cb_nombre_2.DisplayMemberPath = "Nombre";
             //cb_nombre_2.SelectedValuePath = "Nombre";
+
+
            
 
         }
+
+
+        private async Task LoadAndProcessMainData()
+        {
+            await Task.WhenAll(InitBDOrdersDataAsync(), InitBDArribosDataAsync());
+
+            getFormattedData();
+
+        }
+
+
+        private void getFormattedData()
+        {
+            List<OPFormatted> formattedList = new List<OPFormatted>();
+
+
+            //Get arribos items who mateches with OPFolio
+
+             
+
+
+            //Inititallistop
+            foreach (var op in AppData.initialListOP)
+            {
+                var newFormattedOP = new OPFormatted
+                {
+                    Op = op.Op,
+                    FolioOp = op.FolioOP,
+                    Products = []
+                };
+
+                //Obttain the produts that match the OP folio
+                var productos = AppData.initialListOP.FirstOrDefault(p =>
+                    p.FolioOP == newFormattedOP.FolioOp);
+
+
+                if(productos != null)
+                {
+                    var newProduct = new Productss
+                    {
+                        Nombre = productos.Nombre,
+                        Id_Sistema = productos.Id_Sistema,
+                        Empresa = productos.Empresa,
+                        Unidades = productos.Unidades,
+                        Fecha_Plan = productos.Fecha_Plan,
+                        Fecha_OP = productos.Fecha_OP
+
+                    };
+
+                    //get the arribos that match the OP folio
+                    var arribosItem = AppData.ArribosObs
+                        .Where(a => a.FolioOrden.Contains(op.FolioOP))
+                        .ToList();
+                    
+                    newProduct.Arribos = new ObservableCollection<Arribos>(arribosItem);
+
+
+                    newFormattedOP.Products.Add(newProduct);
+                }
+
+
+
+                formattedList.Add(newFormattedOP);
+                AppData.initialFormattedOP.Add(newFormattedOP);
+                //var arribosItems = AppData.ArribosObs.ToList().Where(a =>
+                     //a.FolioOrden.Contains(op.FolioOP));
+
+                //newFormattedOP.Products.Add(arribosItems);
+
+            }
+
+
+
+
+            var json = JsonConvert.SerializeObject(AppData.initialFormattedOP, Formatting.Indented);
+
+            Debug.WriteLine($"La lista GLOBAL FORMATTED ES: {json}");
+        }
+
+
+
 
 
         private async Task InitBDOPFormattedDataAsync()
@@ -286,7 +371,7 @@ namespace WpfApp1
                 });
 
                 var jsonList = JsonConvert.SerializeObject(AppData.initialPtLists, Formatting.Indented);
-                Debug.WriteLine($"La lista de pts es: {jsonList}");
+                //Debug.WriteLine($"La lista de pts es: {jsonList}");
 
             }catch(Exception ex)
             {
@@ -561,7 +646,7 @@ namespace WpfApp1
                     }
                 });
 
-                Debug.WriteLine(AppData.PersonasJson);
+                //Debug.WriteLine(AppData.PersonasJson);
 
                 var autoCloseMsg = new AutoCloseMessageBox(
                     "Datos cargados con éxito!",
@@ -746,3 +831,8 @@ namespace WpfApp1
       
     }
 }
+
+
+
+
+
