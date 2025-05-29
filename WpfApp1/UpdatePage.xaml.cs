@@ -121,6 +121,47 @@ namespace WpfApp1
             });
         }
 
+
+        private void onRealSearchFormatted(object sender, RoutedEventArgs e)
+        {
+            string inputValue = tb_input.Text?.Trim();
+
+            if(string.IsNullOrEmpty(inputValue))
+            {
+                MessageBox.Show("Error, ingresa algo para buscar", "Error");
+                return;
+            }
+
+            //Buscar en el formattedLIST el folio ingresado
+            var results = AppData.initialFormattedOP
+                .Where(op =>
+                (op.FolioOp?.Contains(inputValue, StringComparison.OrdinalIgnoreCase) == true) ||
+                (op.Op?.Contains(inputValue, StringComparison.OrdinalIgnoreCase) == true)
+                ).ToList();
+
+            var jsonResults = JsonConvert.SerializeObject(results, Formatting.Indented);
+
+            Debug.WriteLine($"los resultados son: {jsonResults}");
+
+
+            if(results.Any())
+            {
+                MessageBox.Show("Se encontraron el folio!", "Éxito");
+            }
+            else
+            {
+                MessageBox.Show("Lo siento, no se encontraorn coincidencias", "Error");
+                return;
+            }
+        }
+
+
+
+
+
+
+
+
         private void onSearchFormatted(object sender, RoutedEventArgs e)
         {
             string inputValue = tb_input.Text?.Trim();
