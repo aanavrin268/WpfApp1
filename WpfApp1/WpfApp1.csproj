@@ -10,10 +10,26 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="5.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="WpfPageTransitions" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Converters\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Services\" />
+    <Folder Include="ViewsModels\Dialogs\" />
+    <Folder Include="ViewsModels\Pages\" />
+    <Folder Include="Views\Dialogs\" />
+    <Folder Include="Views\Controls\" />
+    <Folder Include="Views\Charts\" />
+    <Folder Include="Views\Pages\" />
+    <Folder Include="Views\Windows\" />
   </ItemGroup>
 
 </Project>
